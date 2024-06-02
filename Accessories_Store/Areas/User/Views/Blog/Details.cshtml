@@ -1,0 +1,497 @@
+﻿@using Accessories_Store.Models.Entities;
+@using Microsoft.AspNetCore.Identity;
+@model Accessories_Store.Models.Entities.Blog
+@inject Accessories_Store.Areas.Admin.Services.ICommentRepo ICommentRepo
+@inject Accessories_Store.Areas.Admin.Services.IBlogRepo IBlogRepo
+@inject UserManager<ApplicationUser> UserManager
+@section Styles{
+    <style>
+        .entry-card {
+            -webkit-box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.05);
+            -moz-box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.05);
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .entry-content {
+            background-color: #fff;
+            padding: 36px 36px 36px 36px;
+            border-bottom-left-radius: 6px;
+            border-bottom-right-radius: 6px;
+        }
+
+            .entry-content .entry-title a {
+                color: #333;
+            }
+
+                .entry-content .entry-title a:hover {
+                    color: #4782d3;
+                }
+
+            .entry-content .entry-meta span {
+                font-size: 12px;
+            }
+
+        .entry-title {
+            font-size: .95rem;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        .entry-thumb {
+            display: block;
+            position: relative;
+            overflow: hidden;
+            border-top-left-radius: 6px;
+            border-top-right-radius: 6px;
+        }
+
+            .entry-thumb img {
+                border-top-left-radius: 6px;
+                border-top-right-radius: 6px;
+            }
+
+            .entry-thumb .thumb-hover {
+                position: absolute;
+                width: 100px;
+                height: 100px;
+                background: rgba(71, 130, 211, 0.85);
+                display: block;
+                top: 50%;
+                left: 50%;
+                color: #fff;
+                font-size: 40px;
+                line-height: 100px;
+                border-radius: 50%;
+                margin-top: -50px;
+                margin-left: -50px;
+                text-align: center;
+                transform: scale(0);
+                -webkit-transform: scale(0);
+                opacity: 0;
+                transition: all .3s ease-in-out;
+                -webkit-transition: all .3s ease-in-out;
+            }
+
+            .entry-thumb:hover .thumb-hover {
+                opacity: 1;
+                transform: scale(1);
+                -webkit-transform: scale(1);
+            }
+
+        .article-post {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 70px;
+        }
+
+            .article-post .post-thumb {
+                display: block;
+                position: relative;
+                overflow: hidden;
+            }
+
+                .article-post .post-thumb .post-overlay {
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    width: 100%;
+                    height: 100%;
+                    background-color: rgba(0, 0, 0, 0.6);
+                    transition: all .3s;
+                    -webkit-transition: all .3s;
+                    opacity: 0;
+                }
+
+                    .article-post .post-thumb .post-overlay span {
+                        width: 100%;
+                        display: block;
+                        vertical-align: middle;
+                        text-align: center;
+                        transform: translateY(70%);
+                        -webkit-transform: translateY(70%);
+                        transition: all .3s;
+                        -webkit-transition: all .3s;
+                        height: 100%;
+                        color: #fff;
+                    }
+
+                .article-post .post-thumb:hover .post-overlay {
+                    opacity: 1;
+                }
+
+                    .article-post .post-thumb:hover .post-overlay span {
+                        transform: translateY(50%);
+                        -webkit-transform: translateY(50%);
+                    }
+
+        .post-content .post-title {
+            font-weight: 500;
+        }
+
+        .post-meta {
+            padding-top: 15px;
+            margin-bottom: 20px;
+        }
+
+            .post-meta li:not(:last-child) {
+                margin-right: 10px;
+            }
+
+            .post-meta li a {
+                color: #999;
+                font-size: 13px;
+            }
+
+                .post-meta li a:hover {
+                    color: #4782d3;
+                }
+
+            .post-meta li i {
+                margin-right: 5px;
+            }
+
+            .post-meta li:after {
+                margin-top: -5px;
+                content: "/";
+                margin-left: 10px;
+            }
+
+            .post-meta li:last-child:after {
+                display: none;
+            }
+
+        .post-masonry .masonry-title {
+            font-weight: 500;
+        }
+
+        .share-buttons li {
+            vertical-align: middle;
+        }
+
+            .share-buttons li a {
+                margin-right: 0px;
+            }
+
+        .post-content .fa {
+            color: #ddd;
+        }
+
+        .post-content a h2 {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 0px;
+        }
+
+        .article-post .owl-carousel {
+            margin-bottom: 20px !important;
+        }
+
+        .post-masonry h4 {
+            text-transform: capitalize;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .mb40 {
+            margin-bottom: 40px !important;
+        }
+
+        .mb30 {
+            margin-bottom: 30px !important;
+        }
+
+        .media-body h5 a {
+            color: #555;
+        }
+
+        .categories li a:before {
+            content: "\f0da";
+            font-family: 'FontAwesome';
+            margin-right: 5px;
+        }
+        /*
+        Template sidebar
+        */
+
+        .sidebar-title {
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .categories li {
+            vertical-align: middle;
+        }
+
+            .categories li > ul {
+                padding-left: 15px;
+            }
+
+                .categories li > ul > li > a {
+                    font-weight: 300;
+                }
+
+            .categories li a {
+                color: #999;
+                position: relative;
+                display: block;
+                padding: 5px 10px;
+                border-bottom: 1px solid #eee;
+            }
+
+                .categories li a:before {
+                    content: "\f0da";
+                    font-family: 'FontAwesome';
+                    margin-right: 5px;
+                }
+
+                .categories li a:hover {
+                    color: #444;
+                    background-color: #f5f5f5;
+                }
+
+        .categories > li.active > a {
+            font-weight: 600;
+            color: #444;
+        }
+
+        .media-body h5 {
+            font-size: 15px;
+            letter-spacing: 0px;
+            line-height: 20px;
+            font-weight: 400;
+        }
+
+            .media-body h5 a {
+                color: #555;
+            }
+
+                .media-body h5 a:hover {
+                    color: #4782d3;
+                }
+    
+
+    </style>
+    <link rel="stylesheet" type="text/css" href="~/assets/styles/contact.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/styles/contact_responsive.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/styles/blogs.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/styles/main_styles.css">
+
+    <style>
+        .lpa-title h5 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2; /* Số dòng muốn hiển thị */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            height: calc(2 * 1.2em); /* Chiều cao của 2 dòng */
+            line-height: 1.2em; /* Chiều cao dòng */
+        }
+    </style>
+}
+
+<!-- Home -->
+
+<div class="mt-5" style="height:34vh; position:relative">
+    <div class="h-100" style="background-image:url('../assets/images/product.jpg'); object-fit:contain ;"></div>
+    <div class="container" style="position:absolute; top:12vh; left:18vw">
+        <div class="row">
+            <div class="col">
+                <div class="">
+                    <div class="">
+                        <div class="" style="font-size: 36px;
+											color: #FFFFFF;
+											font-family: 'Lucida', serif; line-height:1.3em">
+                            @Model.Title
+                        </div>
+                        <div class="breadcrumbs" style="font-size: 16px;color: #FFFFFF;font-family: 'Lucida', serif;">
+                            <ul>
+                                <li><a href="/">Trang chủ</a></li>
+                                <li><a href="/blogs">Bài viết</a></li>
+                                <li><u>@Model.Title</u></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container pb50 mt-4">
+    <div class="row">
+    <div class="col-md-9 mb40" style="margin-top:15px">
+        <article>
+            <img src="~/images/blogs/@Model.Thumb" alt="" class="img-fluid mb30">
+            <div class="post-content">
+                <h3>@Model.Title</h3>
+                <ul class="post-meta list-inline">
+                    <li class="list-inline-item">
+                        <i class="fa fa-user-circle-o"></i> <a href="#">@Model?.ApplicationUser?.Name</a>
+                    </li>
+                    <li class="list-inline-item">
+                        <i class="fa fa-calendar-o"></i> <a href="#">@Model?.CreatedAt.Value.ToShortDateString()</a>
+                    </li>
+                    <li class="list-inline-item">
+                        <i class="fa fa-tags"></i> <a href="#">Bootstrap4</a>
+                    </li>
+                </ul>
+                <p>@Model?.Scontent</p>
+                <p class="lead">@Model?.Content</p>
+                <p></p>
+                <ul class="list-inline share-buttons">
+                    <li class="list-inline-item">Chia sẻ bài viết:</li>
+                    <li class="list-inline-item">
+                        <a href="#" class="social-icon-sm si-dark si-colored-facebook si-gray-round">
+                            <i class="fa fa-facebook"></i>
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="#" class="social-icon-sm si-dark si-colored-twitter si-gray-round">
+                            <i class="fa fa-twitter"></i>
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="#" class="social-icon-sm si-dark si-colored-linkedin si-gray-round">
+                            <i class="fa fa-linkedin"></i>
+                            <i class="fa fa-linkedin"></i>
+                        </a>
+                    </li>
+                </ul>
+                <hr class="mb40">
+                <h4 class="mb40 text-uppercase font500">Bình luận</h4>
+                   <div id="comment_container">
+                        @foreach (var item in await ICommentRepo.GetAllAsync())
+                        {
+                            @if(item?.Blog?.Id == Model?.Id)
+                            {
+                                <div class="media mb40">
+                                    <i class="d-flex mr-3 fa fa-user-circle-o fa-3x"></i>
+                                    <div class="media-body">
+                                        <h5 class="mt-0 font400 clearfix">
+                                            <a href="#" class="float-right">Reply</a>
+                                            @item.ApplicationUser.Name
+                                        </h5> @item.Content
+                                    </div>
+                                </div>
+                            }
+                            
+                        }
+                   </div>
+                    
+                <hr class="mb40">
+                <h4 class="mb40 text-uppercase font500">Đăng bình luận</h4>
+                <!-- Contact Form -->
+
+                    <div class="contact" style="padding-top: 0 !important;padding-bottom: 20px !important;">
+                    <div class="container">
+                        
+                        <div class="review_form_content" style="margin-top:0 !important">
+                            <form  id="review_form" class="review_form">
+                                <div class="d-flex flex-md-row flex-column align-items-start justify-content-between">
+                                        <input type="hidden" id="user_id_comment" class="review_form_input" value="@UserManager.GetUserId(User)" placeholder="Tên">
+                                    <input type="hidden" class="review_form_input" placeholder="E-mail" >
+                                </div>
+                                <textarea id="comment_content" class="review_form_text" name="review_form_text" placeholder="Lời bình luận"></textarea>
+                                <button type="submit" class="review_form_button">Gửi</button>
+                            </form>
+                        </div>
+                                
+                    </div>
+                </div>
+            </div>
+        </article>
+        <!-- post article-->
+
+    </div>
+        <div class="col-md-3 mb40 blog-aside">
+            <!-- Latest Post -->
+            <div class="widget widget-latest-post">
+                <div class="widget-title">
+                    <h3>Bài viết gần nhất</h3>
+                </div>
+                <div class="widget-body">
+                    @{
+                        int countBlog = 0;
+                    }
+                    @foreach(var item in await IBlogRepo.GetAllAsync())
+                    {
+                        countBlog++;
+                        @if (countBlog<7 && item.Published == true)
+                        {
+                            <div class="latest-post-aside media">
+                                <div class="lpa-left media-body">
+                                    <div class="lpa-title">
+                                        <h5><a href="/blogs/@item.Alias-@item.Id">@item.Title</a></h5>
+                                    </div>
+                                    <div class="lpa-meta">
+                                        <a class="name" href="">
+                                            @item?.ApplicationUser.Name
+                                        </a>
+                                        <a class="date" href="#">
+                                            @item?.CreatedAt.Value.ToShortDateString()
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="lpa-right">
+                                    <a href="/blogs/@item.Alias-@item.Id">
+                                        <img style="height:80px; width:100%; object-fit:cover" src="~/images/blogs/@item.Thumb" title="" alt="">
+                                    </a>
+                                </div>
+                            </div>
+                        }
+                        
+                    }
+                    
+
+                    
+                </div>
+            </div>
+            <!-- End Latest Post -->
+    </div>
+</div>
+</div>
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#review_form').on('submit', function (event) {
+                event.preventDefault(); // Prevent the default form submission
+
+                var userId = $('#user_id_comment').val();
+                var content = $('#comment_content').val();
+                var blogId = @Model.Id;
+                // Send an AJAX request to the server
+                $.ajax({
+                    url: '/blogs/add-comment', // Update with the correct endpoint for adding comments
+                    type: 'POST',
+                    data: {
+                        userId: userId,
+                        blogId:blogId,
+                        content: content
+                    },
+                    success: function (response) {
+                        // Assuming the response contains the new comment
+                        var newComment = `<div class="media mb40">
+                                                <i class="d-flex mr-3 fa fa-user-circle-o fa-3x"></i>
+                                                <div class="media-body">
+                                                    <h5 class="mt-0 font400 clearfix">
+                                                        <a href="#" class="float-right">Reply</a>
+                                                        ${response.userName}
+                                                    </h5> ${response.content}
+                                                </div>
+                                            </div>`;
+
+                        // Append the new comment to the comment container
+                        $('#comment_container').append(newComment);
+
+                        // Clear the textarea
+                        $('#comment_content').val('');
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error adding comment:', error);
+                    }
+                });
+            });
+        });
+    </script>
+}

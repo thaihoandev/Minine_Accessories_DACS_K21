@@ -1,0 +1,171 @@
+﻿@using Accessories_Store.Helpers;
+@using Accessories_Store.ViewModels;
+@section Styles{
+	<link rel="stylesheet" type="text/css" href="~/assets/styles/checkout.css">
+	<link rel="stylesheet" type="text/css" href="~/assets/styles/checkout_responsive.css">
+	<link rel="stylesheet" type="text/css" href="~/assets/styles/main_styles.css">
+
+}
+@using Accessories_Store.Models.Entities;
+
+<!-- Home -->
+<!-- Home -->
+@{
+	List<CartItemVM> productOrder = ViewBag.CartOrder;
+	double? subTotalPrice = 0;
+	double? discountValue = ViewBag.DiscountValue;
+	@if (productOrder!=null && productOrder.Count > 0)
+	{
+		foreach (var item in productOrder)
+		{
+			subTotalPrice += item.TotalPrice;
+		}
+	}
+
+}
+<div class="mt-5" style="height:34vh; position:relative">
+	<div class="h-100" style="background-image:url('../assets/images/categories.jpg'); object-fit:contain ;"></div>
+	<div class="container" style="position:absolute; top:18vh; left:20vw">
+		<div class="row">
+			<div class="col">
+				<div class="">
+					<div class="">
+						<div class="" style="font-size: 36px;
+											color: #FFFFFF;
+											line-height: 0.75;
+											font-family: 'Lucida', serif;">
+							Kiểm tra đơn hàng
+						</div>
+						<div class="breadcrumbs" style="font-size: 16px;color: #FFFFFF;font-family: 'Lucida', serif;">
+							<ul>
+								<li><a href="/">Trang chủ</a></li>
+								<li><a href="/shopping-cart">Giỏ hàng</a></li>
+								<li><u>Kiểm tra đơn hàng</u></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Checkout -->
+
+<div class="checkout">
+	<div class="container">
+		<form asp-action="CheckoutConfirmed" asp-controller="shoppingCart" asp-area="user" method="post">
+			<div class="row">
+				<!-- Billing Details -->
+				<div class="col-lg-6">
+					<div class="billing">
+						<div class="checkout_title">Chi tiết hóa đơn</div>
+						<div class="checkout_form_container">
+							<div id="checkout_form">
+								<div class="d-flex flex-lg-row flex-column align-items-start justify-content-between">
+									<input type="text" class="checkout_input" name="name" placeholder="Họ và Tên" required>
+								</div>
+							
+								<input type="email" class="checkout_input" name="email" placeholder="E-mail" required >
+							
+								<input type="text" class="checkout_input" name="address" placeholder="Địa chỉ" required>
+								<div class="d-flex flex-lg-row flex-column align-items-start justify-content-between">
+									<input type="text" class="checkout_input " name="phone" placeholder="Số điện thoại" required>
+								</div>
+								<textarea name="notes" id="checkout_comment"  class="checkout_comment" placeholder="Để lại ghi chú"></textarea>
+								<div class="billing_options">
+									@* <div class="billing_account">
+										<input type="checkbox" id="checkbox_account" name="regular_checkbox" class="regular_checkbox checkbox_account">
+										<label for="checkbox_account"><img src="images/checked.png" alt=""></label>
+										<span>Create an account</span>
+									</div>
+									<div class="billing_shipping">
+										<input type="checkbox" id="checkbox_shipping" name="regular_checkbox" class="regular_checkbox checkbox_shipping">
+										<label for="checkbox_shipping"><img src="images/checked.png" alt=""></label>
+										<span>Ship to a different address</span>
+									</div> *@
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Cart Details -->
+				<div class="col-lg-6">
+					<div class="cart_details">
+						<div class="checkout_title">Tổng giỏ hàng</div>
+						<div class="cart_total">
+							<ul>
+								<li class="d-flex flex-row align-items-center justify-content-start">
+									<div class="cart_total_title">Sản phẩm</div>
+									<div class="cart_total_price ml-auto">Tổng</div>
+								</li>
+								@if (productOrder!= null && productOrder.Count > 0)
+								{
+									@foreach (var item in productOrder)
+									{
+										<li class="d-flex flex-row align-items-center justify-content-start">
+											<div class="cart_total_title">@item.Quantity . @item.Name - @item.ProductSize cm </div>
+											<div class="cart_total_price ml-auto">@item?.TotalPrice.Value.ToString("N0")đ</div>
+										</li>
+									}
+								}
+								else
+								{
+									<li class="d-flex flex-row align-items-center justify-content-start">
+										<div class="cart_total_title"><b>Chưa có sản phẩm nào !</b></div>
+									</li>
+								}
+
+								<li class="d-flex flex-row align-items-center justify-content-start">
+									<div class="cart_total_title">Tạm tính</div>
+									<div class="cart_total_price ml-auto"> @String.Format("{0:N0}",subTotalPrice)đ</div>
+								</li>
+								<li class="d-flex flex-row align-items-center justify-content-start">
+									<div class="cart_total_title">Phí vận chuyển</div>
+									<div class="cart_total_price ml-auto">0.00 đ</div>
+								</li>
+								<li class="d-flex flex-row align-items-center justify-content-start">
+									<div class="cart_total_title">Giảm giá</div>
+									<div class="cart_total_price ml-auto">@String.Format("{0:N0}",-discountValue)đ</div>
+								</li>
+								<li class="d-flex flex-row align-items-start justify-content-start total_row">
+									<div class="cart_total_title">Tổng</div>
+									<div class="cart_total_price ml-auto"> @String.Format("{0:N0}",subTotalPrice-discountValue)đ</div>
+								</li>
+							</ul>
+						</div>
+						<div class="payment_options">
+							<div>
+								<input type="radio" value="@PaymentType.COD" name="paymentMethod" class="regular_radio" checked>
+								<label for="radio_payment_1">Thanh toán khi giao hàng (COD)</label>
+							</div>
+							<div>
+								<input type="radio" value="@PaymentType.VNPAY" name="paymentMethod" class="regular_radio">
+								<label for="radio_payment_2">Thanh toán qua VnPay</label>
+								<div class="visa payment_option"><a href="#"><img src="~/assets/images/visa.jpg" alt=""></a></div>
+								<div class="master payment_option"><a href="#"><img src="~/assets/images/master.jpg" alt=""></a></div>
+							</div>
+							@if (productOrder != null&& productOrder.Count > 0)
+							{
+								<button type="submit" class="submit_order_btn cart_total_button">Đặt hàng</button>
+							}
+							else
+							{
+								<button type="submit" class="submit_order_btn cart_total_button" disabled style="opacity: 0.5; cursor:not-allowed ">Đặt hàng</button>
+							}
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+@section Scripts{
+	<script src="~/assets/js/checkout_custom.js"></script>
+	<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+	<script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
+	<script>
+		
+	</script>
+}

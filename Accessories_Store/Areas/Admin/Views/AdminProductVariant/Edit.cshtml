@@ -1,0 +1,83 @@
+﻿@model Accessories_Store.Models.Entities.ProductVariant
+
+@{
+    ViewData["Title"] = "Edit";
+    int productId = ViewBag.Product;
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb breadcrumb-style1">
+        <li class="breadcrumb-item">
+            <a asp-area="admin" asp-controller="home" asp-action="index">Trang chủ</a>
+        </li>
+        <li class="breadcrumb-item active">Danh sách sản phẩm con : trang @ViewBag.CurrentPage</li>
+    </ol>
+</nav>
+
+<div>
+    <form action="/admin/products/@Model.ProductId/edit-details/@Model.Id" method="post" enctype="multipart/form-data">
+        <input readonly hidden name="productId" value="@productId" class="form-control" />
+        
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+
+            <div class="d-flex flex-column justify-content-center">
+                <h4 class="mb-1 mt-3">Cập nhật thông tin</h4>
+
+            </div>
+            <div class="d-flex align-content-center flex-wrap gap-3">
+                <a href="/admin/products/@Model.ProductId/edit" class="btn btn-secondary">Quay lại</a>
+                <button type="submit" class="btn btn-primary">Cập nhật</button>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-12 col-lg-12">
+                <!-- Product Information -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="card-tile mb-0">Thông tin sản phẩm</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label" for="ecommerce-product-name">Kích thước</label>
+                            <input type="text" class="form-control" asp-for="ProductSize" id="ecommerce-product-name" placeholder="20 cm" aria-label="Product title">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="ecommerce-product-name">Giá</label>
+                            <input type="number" class="form-control" asp-for="Price" id="ecommerce-product-name" placeholder="100.000" aria-label="Product title">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="ecommerce-product-name">Số lượng</label>
+                            <input type="number" class="form-control" asp-for="Quantity" id="ecommerce-product-name" placeholder="Số lượng" aria-label="Product title">
+                        </div>
+                        <div class="mb-3">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label class="form-label" for="ecommerce-product-name">Ngày tạo</label>
+                                    <input type="text" readonly class="form-control" asp-for="CreatedAt" id="ecommerce-product-name"  aria-label="Product title">
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label" for="ecommerce-product-name">Ngày cập nhật</label>
+                                    <input type="text" readonly class="form-control" asp-for="UpdatedAt" id="ecommerce-product-name"  aria-label="Product title">
+                                </div>
+
+                            </div>
+                            
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- /Product Information -->
+
+            </div>
+
+        </div>
+
+    </form>
+</div>
+@section Scripts{
+
+}
+
+

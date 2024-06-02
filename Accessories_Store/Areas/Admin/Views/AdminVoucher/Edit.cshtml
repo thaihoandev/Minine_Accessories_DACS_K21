@@ -1,0 +1,102 @@
+﻿@model Accessories_Store.Models.Entities.PaymentCoupon
+
+@{
+    ViewData["Title"] = "Create";
+}
+@section Styles{
+
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb breadcrumb-style1">
+        <li class="breadcrumb-item">
+            <a asp-area="admin" asp-controller="home" asp-action="index">Trang chủ</a>
+        </li>
+        <li class="breadcrumb-item active">Danh sách ưu đãi : trang @ViewBag.CurrentPage</li>
+    </ol>
+</nav>
+
+<div>
+    <form action="/admin/vouchers/@Model.Id/edit" method="post" enctype="multipart/form-data">
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+
+            <div class="d-flex flex-column justify-content-center">
+                <h4 class="mb-1 mt-3">Cập nhật</h4>
+
+            </div>
+            <div class="d-flex align-content-center flex-wrap gap-3">
+                <a href="/admin/vouchers" class="btn btn-secondary">Quay lại</a>
+                <button type="submit" class="btn btn-primary">Cập nhật </button>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-4 col-lg-4">
+                <!-- Product Information -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="card-tile mb-0">Ưu đãi</h5>
+                    </div>
+                    <div class="card-body row">
+                        <div class="mb-3 col-lg-12">
+                            <label class="form-label" for="ecommerce-product-name">Mã ưu đãi</label>
+                            <input type="text" readonly class="form-control" asp-for="CouponCode" id="ecommerce-product-name" placeholder="% giảm" aria-label="">
+                        </div>
+                        <div class="mb-3 col-lg-6">
+                            <label class="form-label" for="ecommerce-product-name">Ngày tạo</label>
+                            <input type="text" readonly class="form-control" asp-for="CreatedAt" id="ecommerce-product-name" placeholder="Số lượng" aria-label="">
+                        </div>
+                        <div class="mb-3 col-lg-6">
+                            <label class="form-label" for="ecommerce-product-name">Ngày hết hạn</label>
+                            <input type="text" readonly class="form-control" asp-for="ValidUntil" id="ecommerce-product-name" placeholder="Số lượng" aria-label="">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- /Product Information -->
+
+            </div>
+            <div class="col-8 col-lg-8">
+                <!-- Product Information -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="card-tile mb-0">Thông tin chi tiết</h5>
+                    </div>
+                    <div class="card-body row">
+                        <div class="mb-3 col-lg-6">
+                            <label class="form-label" for="ecommerce-product-name">Giảm giá (%)</label>
+                            <input type="text" class="form-control" asp-for="DiscountValue" id="ecommerce-product-name" placeholder="% giảm" aria-label="">
+                        </div>
+                        <div class="mb-3 col-lg-6">
+                            <label class="form-label" for="ecommerce-product-name">Số lượng Voucher</label>
+                            <input type="text" class="form-control" asp-for="DiscountUnit" id="ecommerce-product-name" placeholder="Số lượng" aria-label="">
+                        </div>
+                        <div class="mb-3 col-lg-6">
+                            <label class="form-label" for="ecommerce-product-name">Đơn hàng tối thiếu</label>
+                            <input type="text" class="form-control" asp-for="MinimumOrder" id="ecommerce-product-name" placeholder="Số lượng" aria-label="">
+                        </div>
+                        <div class="mb-3 col-lg-6">
+                            <label class="form-label" for="ecommerce-product-name">Giá giảm tối đa</label>
+                            <input type="text" class="form-control" asp-for="MaximumDiscount" id="ecommerce-product-name" placeholder="Giá giảm tối đa" aria-label="">
+                        </div>
+                        <!-- Description -->
+                        <div>
+                            <label class="form-label">Mô tả <span class="text-muted"></span></label>
+                            <div class="form-control p-0 pt-1">
+                                <textarea class="form-control" asp-for="Description" placeholder="Nhập...."></textarea>
+                                <span class="text-danger"></span>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- /Product Information -->
+
+            </div>
+        </div>
+    </form>
+</div>
+@section Scripts{
+
+}

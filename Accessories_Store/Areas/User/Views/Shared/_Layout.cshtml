@@ -1,0 +1,141 @@
+﻿<!DOCTYPE html>
+<html lang="en" data-assets-path="~/assets/">
+<head>
+	<title>Minine Accessories</title>
+	<link type="image/x-icon" href="~/assets/images/logo/Logo_Minine.jpg" rel="shortcut icon">
+
+	<meta charsetsrcutf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="description" content="Wish shop project">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="~/assets/styles/bootstrap4/bootstrap.min.css">
+	<link href="~/assets/plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" type="text/css" href="~/assets/plugins/OwlCarousel2-2.2.1/owl.carousel.css">
+	<link rel="stylesheet" type="text/css" href="~/assets/plugins/OwlCarousel2-2.2.1/owl.theme.default.css">
+	<link rel="stylesheet" type="text/css" href="~/assets/plugins/OwlCarousel2-2.2.1/animate.css">
+	<link href="~/assets/plugins/colorbox/colorbox.css" rel="stylesheet" type="text/css">
+	<link href="~/assets/plugins/malihu-custom-scrollbar/jquery.mCustomScrollbar.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" type="text/css" href="~/assets/plugins/jquery-ui-1.12.1.custom/jquery-ui.css">
+
+	<link rel="stylesheet" type="text/css" href="~/assets/styles/main_styles.css">
+	
+	<link rel="stylesheet" type="text/css" href="~/assets/styles/header_navbar.css">
+
+	<link rel="stylesheet" type="text/css" href="~/assets/styles/responsive.css">
+
+
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+	
+	<style>
+
+		.open-chat-btn {
+			position: fixed;
+			bottom: 20px;
+			right: 20px;
+			z-index: 9999;
+		}
+	</style>
+</head>
+<body>
+	<div class="super_container">
+
+		<!-- Header -->
+		@await Html.PartialAsync("_HeaderPartialView.cshtml")
+
+		<main class="" style="margin-top:13vh">
+			@RenderBody()
+		</main>
+
+		<!-- Newsletter -->
+
+		<div class="newsletter">
+			<div class="newsletter_content">
+				<div class="newsletter_image" style="background-image:url(/assets/images/newsletter.jpg)"></div>
+				<div class="container">
+					<div class="row">
+						<div class="col">
+							<div class="section_title_container text-center">
+								<div class="section_subtitle">Chỉ riêng với bạn</div>
+								<div class="section_title">Điều tuyệt vời nhất</div>
+							</div>
+						</div>
+					</div>
+					<div class="row newsletter_container">
+						<div class="col-lg-10 offset-lg-1">
+							<div class="newsletter_form_container">
+								<form action="#">
+									<input type="email" class="newsletter_input" required="required" placeholder="Nhập E-mail">
+									<button type="submit" class="newsletter_button">Đăng ký</button>
+								</form>
+							</div>
+							<div class="newsletter_text">Đăng ký tài khoản để mua sắm và nhận cơ hội giảm 20% giá trị!</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Button to open chat box -->
+		<a href="/chat" id="openChatBtn" class="btn btn-primary open-chat-btn">Chat</a>
+
+
+		<!-- Footer -->
+		@await Html.PartialAsync("_FooterPartialView.cshtml")
+		
+	</div>
+	<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+	<script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
+
+	<script src="~/assets/styles/bootstrap4/popper.js"></script>
+	<script src="~/assets/styles/bootstrap4/bootstrap.min.js"></script>
+	<script src="~/assets/plugins/OwlCarousel2-2.2.1/owl.carousel.js"></script>
+	<script src="~/assets/plugins/easing/easing.js"></script>
+	<script src="~/assets/plugins/parallax-js-master/parallax.min.js"></script>
+
+	<script src="~/assets/plugins/colorbox/jquery.colorbox-min.js"></script>
+
+	<script src="~/assets/js/custom.js"></script>
+	<script src="~/assets/js/header_navbar.js"></script>
+
+
+	<script src="~/assets/plugins/malihu-custom-scrollbar/jquery.mCustomScrollbar.js"></script>
+	<script src="~/assets/plugins/Isotope/isotope.pkgd.min.js"></script>
+
+
+	@await Component.InvokeAsync("Notyf")
+	@await RenderSectionAsync("Scripts", required:false)
+	@await RenderSectionAsync("Styles", required:false)
+
+	<script>
+		$(document).ready(function () {
+			// Open chat box when clicking on the open button
+			$('#openChatBtn').click(function () {
+				$('#chatBox').fadeIn();
+			});
+
+			// Close chat box when clicking outside the chat box or on the close button
+			$(document).click(function (event) {
+				if (!$(event.target).closest('#chatBox, #openChatBtn').length) {
+					$('#chatBox').fadeOut();
+				}
+			});
+
+			// Prevent closing chat box when clicking inside the chat box
+			$('#chatBox').click(function (event) {
+				event.stopPropagation();
+			});
+
+			// Close button click event
+			$('.close-chat-btn').click(function () {
+				$('#chatBox').fadeOut();
+			});
+
+			// Send message button click event
+			$('#sendBtn').click(function () {
+				var message = $('#chatInput').val();
+				// Send message logic here
+				$('#chatInput').val(''); // Clear input field
+			});
+		});
+	</script>
+</body>
+</html>

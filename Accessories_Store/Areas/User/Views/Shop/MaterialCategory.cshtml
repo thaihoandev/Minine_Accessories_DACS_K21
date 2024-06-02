@@ -1,0 +1,162 @@
+﻿@using Accessories_Store.Models.Entities;
+@using System.Linq;
+@using PagedList.Core;
+@model PagedList.Core.IPagedList<Product>
+@inject Accessories_Store.Areas.Admin.Services.IRatingRepo IRatingRepo
+@inject Accessories_Store.Areas.Admin.Services.ICategoryRepo ICategoryRepo
+
+
+@section Styles{
+	<link rel="stylesheet" type="text/css" href="~/assets/styles/categories.css">
+	<link rel="stylesheet" type="text/css" href="~/assets/styles/categories_responsive.css">
+
+	<link rel="stylesheet" type="text/css" href="~/assets/styles/main_styles.css">
+	<link rel="stylesheet" type="text/css" href="~/assets/styles/product_list.css">
+
+	<style>
+		
+	</style>
+
+}
+
+<!-- Home -->
+
+<div class="" style="height:34vh; position:relative; margin-top:13vh;">
+	<div class="h-100" style="background-image:url('/images/productMaterials/@ViewBag.Material.Thumb');object-fit:contain ; "></div>
+	<div class="container" style="position:absolute; top:10vh; left:18vw">
+		<div class="row">
+			<div class="col-lg-6 col-6">
+				<div class="">
+					<div class="">
+						<div class="breadcrumbs" style="font-size: 16px;color: #FFFFFF;font-family: 'Lucida', serif;">
+							<ul>
+								<li><a href="index.html">Trang chủ</a></li>
+								<li><u>@ViewBag.Material.Name</u></li>
+							</ul>
+							<div class="" style="font-size: 36px;
+											color: #FFFFFF;
+											line-height: 0.75;
+											font-family: 'Lucida', serif;
+											padding: 16px 0;">
+								@ViewBag.Material.Name
+							</div>
+							<p style="color: #fff ;padding: 10px 0;">
+								@ViewBag.Material.Description
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Products -->
+<div class="container">
+    <div class="new-collection-cates row">
+        <ul class="new-collection-cates-list">
+			@{
+				int count = 0;
+			}
+            @foreach (var item in await ICategoryRepo.GetAllAsync())
+            {
+				
+				if (count < 5)
+                {
+                    <li>
+                        <a href="/collections/@item.Alias" class="new-collection-cate-item">
+                            <span class="new-collection-cate-item-head">
+                                <img class="img-fluid dt-width-auto" width="98" height="98" src="~/images/categories/@item.Thumb" alt="">
+                            </span>
+                            <span class="new-collection-cate-item-title">@item.Name</span>
+                        </a>
+                    </li>
+                    count++;
+                }
+            }
+        </ul>
+    </div>
+</div>
+
+<div class="products" style="border-top: 1px solid #e7e7e7;">
+	<div class="container">
+		<!-- Products -->
+
+		<div class="row">
+			@if (Model != null)
+			{
+				@foreach (var item in Model)
+				{
+					var variantId = @item.ProductVariants.First().Id;
+					var ratingSum = 0;
+					var ratingCount = 0;
+					var ratingAvg = 0;
+					var ratings = @IRatingRepo.findAllById(item.Id);
+					foreach (var rating in ratings)
+					{
+						ratingCount++;
+						ratingSum += rating.NumberStar;
+						ratingAvg = ratingSum / ratingCount;
+					}
+					<!-- Product -->
+					<div class="product col-lg-3">
+						<div class="product_image"><img src="~/images/products/@item.Thumb" alt=""></div>
+						<div class="rating rating_@ratingAvg" data-rating="@ratingAvg">
+							<i class="fa fa-star"></i>
+							<i class="fa fa-star"></i>
+							<i class="fa fa-star"></i>
+							<i class="fa fa-star"></i>
+							<i class="fa fa-star"></i>
+						</div>
+						<div class="product_content clearfix">
+							<div class="product_info">
+								<div class="product_name"><a href="/products/@item.Alias-@item.Id">@item.Name</a></div>
+								<div class="product_price">
+									@if (item.ProductVariants != null)
+									{
+										@item.ProductVariants.First().Price.Value.ToString("N0")
+									}
+									đ
+								</div>
+							</div>
+							<div class="product_options">
+								<div id="addToCartBtn" class="product_buy product_option">
+
+									<a href="/products/@item.Alias-@item.Id">
+										<img src="~/assets/images/shopping-bag-white.svg" alt="Add to Cart">
+									</a>
+								</div>
+								<div class="product_fav product_option">+</div>
+							</div>
+						</div>
+					</div>
+				}
+			}
+		</div>
+
+		<div class="row page_num_container">
+			<div class="col text-right">
+				<ul class="page_nums">
+					@for (int i = 1; i <= Model.PageCount; i++)
+					{
+						if (i == ViewBag.CurrentPage)
+						{
+							<li><a class="active" href="/collections/@ViewBag.Material.Alias?page=@i">@i</a></li>
+						}
+						else
+						{
+							<li><a href="/collections/@ViewBag.Material.Alias?page=@i">@i</a></li>
+
+						}
+					}
+				</ul>
+			</div>
+		</div>
+
+	</div>
+
+</div>
+
+<!-- Extra -->
+@section Scripts{
+	<script src="~/assets/js/categories_custom.js"></script>
+}

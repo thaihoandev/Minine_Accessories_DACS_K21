@@ -1,0 +1,485 @@
+﻿@using Accessories_Store.Helpers;
+@using Accessories_Store.Models.Entities;
+@using Accessories_Store.ViewModels;
+@using Microsoft.AspNetCore.Identity;
+@inject Accessories_Store.Areas.Admin.Services.IRatingRepo IRatingRepo
+@inject Accessories_Store.Areas.Admin.Services.IProductVariantRepo IProductVariantRepo
+@inject Accessories_Store.Areas.Admin.Services.ICategoryRepo ICategoryRepo
+@model IEnumerable<Product>
+@inject UserManager<ApplicationUser> UserManager;
+@section Styles{
+
+	<link rel="stylesheet" type="text/css" href="~/assets/styles/product.css">
+	<link rel="stylesheet" type="text/css" href="~/assets/styles/product_responsive.css">
+
+	<link rel="stylesheet" type="text/css" href="~/assets/styles/main_styles.css">
+
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+	<link rel="stylesheet" type="text/css" href="~/assets/styles/contact.css">
+	<link rel="stylesheet" type="text/css" href="~/assets/styles/contact_responsive.css">
+
+	<style>
+		ul.review:not(:first-child) {
+			display: none;
+		}
+
+		.star-rating {
+			font-size: 0;
+			white-space: nowrap;
+			display: flex;
+			flex-direction: row;
+		}
+
+			.star-rating input {
+				display: none;
+			}
+
+			.star-rating label {
+				font-size: 30px;
+				color: #ffc107;
+				display: inline-block;
+				padding: 0 2px;
+				cursor: pointer;
+			}
+
+			.star-rating input:checked ~ label {
+				color: #ccc;
+			}
+
+
+			
+	</style>
+}
+@{
+	var variantId = ViewBag.VariantId;
+	var id = ViewBag.Id;
+	var cart = ViewContext.HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart");
+	var cartCount = 0;
+	if (cart?.Items != null)
+	{
+		cartCount = cart.Items.Count();
+	}
+	else
+	{
+		
+	}
+	var countImages = 0;
+}
+<!-- Home -->
+<!-- Home -->
+
+<div class="" style="height:34vh; position:relative; margin-top:13vh;">
+	<div class="h-100" style="background-image:url('../images/categories/@IProductVariantRepo.GetById(variantId).Product.Category.Thumb'); object-fit:contain ;"></div>
+	<div class="container" style="position:absolute; top:18vh; left:20vw">
+		<div class="row">
+			<div class="col">
+				<div class="">
+					<div class="">
+						<div class="" style="font-size: 36px;
+											color: #FFFFFF;
+											line-height: 0.75;
+											font-family: 'Lucida', serif;">
+							@IProductVariantRepo.GetById(variantId).Product.Name
+						</div>
+						<div class="breadcrumbs" style="font-size: 16px;color: #FFFFFF;font-family: 'Lucida', serif;">
+							<ul>
+								<li><a href="index.html">Trang chủ</a></li>
+								<li><a href="/collections/@IProductVariantRepo.GetById(variantId).Product.Category.Alias">@IProductVariantRepo.GetById(variantId).Product.Category.Name</a></li>
+
+								<li><u>@IProductVariantRepo.GetById(variantId).Product.Name</u></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+</div>
+<div class="mt-5  mb-5">
+	<div class="container">
+		
+		<div class="row">
+
+			<!-- Product Image -->
+			<div class="col-lg-7">
+				<div class="product_image">
+					<div class="product_image_large"><img src="~/images/products/@IProductVariantRepo.GetById(variantId).Product.Thumb" alt=""></div>
+					<div class="product_image_thumbnails d-flex flex-row align-items-start justify-content-start">
+						@foreach (var item in @IProductVariantRepo.GetById(variantId).Product.ProductImages)
+						{
+							countImages++;
+							@if (countImages < 4)
+							{
+								<div class="product_image_thumbnail" style="background-image:url(../images/products/product-details/@item.Path)" data-image="../images/products/product-details/@item.Path"></div>
+							}
+						}
+					</div>
+				</div>
+			</div>
+
+			<!-- Product Content -->
+			<div class="col-lg-5">
+				<div class="product_content">
+					<div class="product_name">@IProductVariantRepo.GetById(variantId).Product.Name</div>
+					<div class="product_price">@IProductVariantRepo.GetById(variantId).Price.ToString("N0")đ</div>
+					@{
+						var ratingSum = 0;
+						var ratingCount = 0;
+						var ratingAvg = 0;
+						var ratings = IRatingRepo.findAllById(id);
+						foreach (var rating in ratings)
+						{
+							ratingCount++;
+							ratingSum += rating.NumberStar;
+							ratingAvg = ratingSum / ratingCount;
+						}
+					}
+					<div class="rating rating_@ratingAvg" data-rating="@ratingAvg">
+						<i class="fa fa-star"></i>
+						<i class="fa fa-star"></i>
+						<i class="fa fa-star"></i>
+						<i class="fa fa-star"></i>
+						<i class="fa fa-star"></i>
+					</div>
+					<!-- In Stock -->
+					<div class="in_stock_container">
+						<div class="in_stock in_stock_true"></div>
+						<span>in stock</span>
+					</div>
+					<!-- Material -->
+					<div class="">
+						<div class="mt-3">
+							<label class="bg-light mr-2"><b>Chất liệu:</b></label>
+							<span>@IProductVariantRepo.GetById(variantId).Product.ProductMaterial.Name</span>
+						</div>
+						
+					</div>
+					<div class="product_text">
+						<input id="variantid_input" hidden type="text" value="@IProductVariantRepo.GetById(variantId).Id">
+						<input id="productid_input" hidden type="text" value="@IProductVariantRepo.GetById(variantId).Product.Id">
+						<p>@IProductVariantRepo.GetById(variantId).Product.Description</p>
+					</div>
+					<!-- Product Quantity -->
+					<div class="product_quantity_container">
+						<span>Quantity</span>
+						<div class="product_quantity clearfix">
+							<input id="quantity_input" type="text" pattern="[0-9]*" name="quantity" value="1">
+							<div class="quantity_buttons">
+								<div id="quantity_inc_button" class="quantity_inc quantity_control"><i class="fa fa-caret-up" aria-hidden="true"></i></div>
+								<div id="quantity_dec_button" class="quantity_dec quantity_control"><i class="fa fa-caret-down" aria-hidden="true"></i></div>
+							</div>
+						</div>
+					</div>
+					<!-- Product Size -->
+					<div class="product_size_container">
+						<span>Size</span>
+						<div class="product_size">
+							<ul class="d-flex flex-row align-items-start justify-content-start">
+								@foreach (var item in @IProductVariantRepo.GetProductDetailsById(id))
+								{
+									<li>
+										@if (item.Id == variantId)
+										{
+											<input type="radio" id="@("radio_" + item.Id)" name="product_radio" data-variant-id="@item.Id" class="regular_radio radio_1" checked>
+											<label for="@("radio_" + item.Id)" class="radio_label">@item.ProductSize cm</label>
+										}
+										else
+										{
+											<input type="radio" id="@("radio_" + item.Id)" name="product_radio" data-variant-id="@item.Id" class="regular_radio radio_1">
+											<label for="@("radio_" + item.Id)" class="radio_label">@item.ProductSize cm</label>
+										}
+									</li>
+
+								}
+							</ul>
+						</div>
+						<div id="cartBtn" style="cursor:pointer" class="button cart_button"><a>add to cart</a></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Reviews -->
+
+		<div class="row" style="margin-top:160px">
+			<div class="col">
+				<div class="reviews">
+					<div class="reviews_title">Đánh giá</div>
+					<div class="reviews_container">
+						<ul>
+							@foreach(var item in IRatingRepo.findAllById(id))
+							{
+								<!-- Review -->
+								<li class=" review clearfix" style="display:none">
+									<div class="review_image" style="object-fit:contain"><img style="object-fit:contain" src="~/images/users/@item.ApplicationUser.Avatar" alt=""></div>
+									<div class="review_content">
+										<div class="review_name"><a href="#">@item.ApplicationUser.Name</a></div>
+										<div class="review_date">@item.CreatedAt</div>
+										<div class="rating rating_@item.NumberStar review_rating" data-rating="@item.NumberStar">
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+										</div>
+										<div class="review_text">
+											<p>@item.Content </p>
+										</div>
+									</div>
+								</li>
+							}
+							
+							
+						</ul>
+						<div style="width: 100%;
+									display: flex;
+									align-items: center;
+									justify-content: center;">
+							<button id="showMoreReviews" class="button cart_button rounded" style="display: block; border:none;">Xem Thêm</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Leave a Review -->
+
+		<div class="row">
+			<div class="col">
+				<div class="review_form_container">
+					<div class="review_form_title">Gửi một đánh giá</div>
+					<div class="review_form_content">
+						<form action="#" id="review_form" class="review_form">
+							@* <div class="d-flex flex-md-row flex-column align-items-start justify-content-between">
+								<select id="numberStar" required="required" class="form-select select2 select2-hidden-accessible" style="border: solid 1px #b5b5b5;font-size: 15px ;height: 30px; padding:6px;outline: none;color: #8c8c8c;font-style: italic;">
+									<option disabled selected>Chọn sao</option>
+									<option value="1" >1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+									<option value="4">4</option>
+									<option value="5">5</option>
+
+								</select>
+							</div> *@
+							<div class="star-rating">
+								<label for="star1" title="1 star">&#9733;</label>
+								<input type="radio" id="star1" name="rating" value="1" />
+								<label for="star2" title="2 stars">&#9733;</label>
+								<input type="radio" id="star2" name="rating" value="2" />
+								<label for="star3" title="3 stars">&#9733;</label>
+								<input type="radio" id="star3" name="rating" value="3" />
+								<label for="star4" title="4 stars">&#9733;</label>
+								<input type="radio" id="star4" name="rating" value="4" />
+								<label for="star5" title="5 stars">&#9733;</label>
+								<input type="radio" id="star5" name="rating" value="5" checked/>
+							</div>
+							<textarea id="message" class="review_form_text" name="review_form_text" placeholder="Message"></textarea>
+							<button type="button" id="submit_review" class="review_form_button">Gửi đánh giá</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col">
+				<div class="review_form_container">
+					<div class="review_form_title">Sản phẩm tương tự</div>
+					<div class="">
+						<div class="row">
+							@if (Model != null)
+							{
+								@foreach (var itemSimilar in Model)
+								{
+									var _variantId = @itemSimilar?.ProductVariants?.First().Id;
+									
+									<!-- Product -->
+									<div class="product col-lg-3" style="padding: 30px 4px !important;">
+										<div class="product_image"><img src="~/images/products/@itemSimilar.Thumb" alt=""></div>
+										
+										<div class="product_content clearfix">
+											<div class="product_info">
+												<div class="product_name"><a href="/products/@itemSimilar.Alias-@itemSimilar.Id">@itemSimilar.Name</a></div>
+												<div class="product_price">
+													@if (itemSimilar.ProductVariants != null)
+													{
+														@itemSimilar.ProductVariants.First().Price.Value.ToString("N0")
+													}
+													đ
+												</div>
+											</div>
+											<div class="product_options">
+												<div id="addToCartBtn" class="product_buy product_option">
+
+													<a href="/products/@itemSimilar.Alias-@itemSimilar.Id">
+														<img src="~/assets/images/shopping-bag-white.svg" alt="Add to Cart">
+													</a>
+												</div>
+												<div class="product_fav product_option">+</div>
+											</div>
+										</div>
+									</div>
+								}
+							}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+@section Scripts{
+	<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+	<script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+	<script src="~/assets/js/product_custom.js"></script>
+	<script>
+		$(document).ready(function () {
+			$('#submit_review').on('click', function (e) {
+				e.preventDefault(); // Ngăn chặn sự kiện mặc định của nút submit
+
+				// Thu thập dữ liệu từ các trường input
+				var numberStar = $('.star-rating input:checked').val();
+				var message = $('#message').val();
+				var userId = '@UserManager.GetUserId(User)';
+				var productId = $('#productid_input').val();
+				
+				// Tạo đối tượng dữ liệu để gửi lên máy chủ
+				var data = {
+					userId: userId,
+					numberStar: numberStar,
+					message: message,
+					productId: productId,
+				};
+
+				// Gửi yêu cầu AJAX đến URL mong muốn
+				$.ajax({
+					url: '/submit-review',
+					type: 'POST',
+					data: data,
+					success: function (response) {
+						// Xử lý kết quả trả về từ máy chủ (nếu cần)
+						if (response.success) {
+							location.reload();
+						}
+						else {
+							window.location.href = "/identity/account/login"
+						}
+					},
+					error: function (xhr, status, error) {
+						// Xử lý lỗi nếu có
+						console.error(error);
+					}
+				});
+			});
+
+			$('#cartBtn').on('click', function () {
+				var quantity = $('#quantity_input').val();
+				var selectedSize = $('input[name="product_radio"]:checked').val(); // Lấy giá trị của kích thước được chọn
+				var id = $('#variantid_input').val();
+				// Gửi yêu cầu AJAX
+				
+				$.ajax({
+					url: '/cart/add',
+					data: {
+						id: id,
+						quantity: quantity,
+						size: selectedSize
+					},
+
+					success: function (response) {
+						// Xử lý phản hồi từ máy chủ
+						// Ví dụ: hiển thị thông báo thành công
+					
+						if (response.success) {
+							Toastify({
+								text: "Thêm sản phẩm vào giỏ hàng thành công!",
+								duration: 3000, // Thời gian hiển thị toast notification (ms)
+								gravity: "top-right", // Vị trí hiển thị
+								style: {
+									height: "auto", // Độ cao tự động điều chỉnh
+									fontSize: "16px", // Kích thước của font chữ
+									alignItems: "center", // Căn giữa theo chiều dọc
+									padding: "14px" // Padding xung quanh nội dung của toast
+								}
+							}).showToast();
+							var cart = ViewContext.HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart");
+							var cartCount = 0;
+							if (cart?.Items != null) {
+								cartCount = cart.Items.Count();
+							}
+							console.log($('.cart .cart_num').text(@cartCount));
+						} else {
+							// Xử lý trường hợp không thành công nếu cần
+						}
+					},
+					error: function (xhr, status, error) {
+						// Xử lý lỗi nếu có
+					}
+				});
+			});
+
+			
+			// Bắt sự kiện onchange cho các radio buttons
+			$('.radio_label').click(function () {
+				var radioId = $(this).attr('for');
+				$('#' + radioId).prop('checked', true).trigger('change');
+
+				var variantId = $('#' + radioId).data('variant-id');
+				console.log(variantId);
+				// Gửi yêu cầu AJAX để lấy giá mới cho variantId đã chọn
+				$.ajax({
+					url: '/get-variant-price',
+					method: 'POST',
+					data: { variantId: variantId },
+					success: function (response) {
+						// Xử lý phản hồi từ máy chủ
+						if (response.success) {
+
+							var price = Number(response.price);
+							if (!isNaN(price)) {
+								// Format the price using toLocaleString for Vietnamese locale
+								var formattedPrice = price.toLocaleString('vi-VN') + " đ";
+								$('.product_price').text(formattedPrice);
+							} else {
+								console.error("Invalid price value:", response.price);
+							}
+							$('#variantid_input').val(response.id);
+						} else {
+							window.location.href = "/identity/account/login"
+						}
+						
+						
+					},
+					error: function (xhr, status, error) {
+						// Xử lý lỗi nếu có
+
+					}
+				});
+			});
+
+
+			$(document).ready(function () {
+				var reviewsCount = $(' ul .review').length;
+				console.log(reviewsCount);
+				$('ul .review:hidden').slice(0, 7).show();
+				if (reviewsCount > 7) {
+					$("#showMoreReviews").show();
+				}else{
+					$("#showMoreReviews").hide();
+
+				}
+
+				$("#showMoreReviews").on("click", function () {
+					$('ul .review:hidden').slice(0, 7).show();
+					var visibleReviews = $("ul.review:visible").length;
+					if (visibleReviews >= reviewsCount) {
+						$(this).hide();
+					}
+				});
+			});
+		});
+	</script>
+}

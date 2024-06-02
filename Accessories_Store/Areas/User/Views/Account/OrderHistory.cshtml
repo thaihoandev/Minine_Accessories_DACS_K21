@@ -1,0 +1,106 @@
+﻿@using Accessories_Store.Helpers;
+@using Accessories_Store.Models.Entities;
+@model IEnumerable<Order>
+@{
+    ViewData["Title"] = "Đơn hàng";
+    ViewData["ActivePage"] = "Đơn hàng";
+    Layout = "/Areas/Identity/Pages/Account/Manage/_Layout.cshtml";
+}
+
+<div class="card">
+    <div class="m-2 d-flex align-item-center">
+        <div class="card-body m-0 p-2">
+            <div class="row gx-3 gy-2 align-items-center">
+            </div>
+        </div>
+
+    </div>
+
+    <div class="table-responsive ">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Mã đơn</th>
+                    <th scope="col">Ngày đặt</th>
+                    
+                    <th scope="col">Giá trị</th>
+                    <th scope="col">Thanh toán</th>
+                    <th scope="col">Trạng thái</th>
+                    <td scope="col">#</td>
+
+                </tr>
+            </thead>
+            <tbody id="records_table">
+                @if (Model != null)
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <a href="/admin/orders/@item.Id/details"><span class="fw-medium">#@item.Id</span></a>
+                            </td>
+                            <td>
+                                @item.CreatedAt.Value.ToShortDateString();
+                            </td>
+
+                            <td>
+                                @item?.TotalPrice.Value.ToString("N0") đ
+                            </td>
+
+
+                            <td>
+                                @if (item.OrderStatusPayment == PaymentType.StatusCOD)
+                                {
+                                    <span class="badge bg-label-success me-1">COD</span>
+                                }
+                                else if (item.OrderStatusPayment == PaymentType.StatusVNPAY)
+                                {
+                                    <span class="badge bg-label-primary me-1">VN Pay</span>
+                                }
+
+                            </td>
+                            <td>
+                                @if (item.Status == Status.StatusOk)
+                                {
+                                    <span class="badge bg-label-primary me-1 ">Đã giao</span>
+                                }
+                                else if (item.Status == Status.StatusCancel)
+                                {
+                                    <span class="badge bg-label-secondary me-1 ">Đã hủy</span>
+
+                                }
+                                else if (item.Status == Status.StatusNotConfirmed)
+                                {
+                                    <span class="badge bg-label-secondary me-1 ">Chưa xác nhận</span>
+
+                                }
+
+                            </td>
+                            <td>
+
+                                <div class="dropdown">
+                                    <a href="/admin/orders/@item.Id/details" class="btn btn-sm btn-icon">
+                                        <i class="bx bx-show"></i>
+                                    </a>
+                                    <a asp-area="User" asp-controller="account" asp-action="orderDetail" asp-route-orderId="@item.Id" class="btn p-0 hide-arrow">
+                                        <i class="fa fa-eye"></i>
+                                        Xem
+                                    </a>
+                                    
+                                </div>
+                            </td>
+
+                        </tr>
+                    }
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        })
+    </script>
+}

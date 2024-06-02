@@ -1,0 +1,228 @@
+﻿@using Accessories_Store.Models.Entities;
+@using Microsoft.AspNetCore.Identity;
+@model Accessories_Store.Models.Entities.Blog
+@inject UserManager<ApplicationUser> UserManager
+@section Styles {
+
+    <link href="../assets/styles/multiple_images.css" rel="stylesheet">
+
+    <style>
+        #upload {
+            opacity: 0;
+        }
+
+        #upload-label {
+            position: absolute;
+            top: 50%;
+            left: 1rem;
+            transform: translateY(-50%);
+        }
+
+        .image-area {
+            border: 2px dashed rgba(255, 255, 255, 0.7);
+            padding: 1rem;
+            position: relative;
+        }
+
+            .image-area::before {
+                content: 'Uploaded image result';
+                color: #fff;
+                font-weight: bold;
+                text-transform: uppercase;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 0.8rem;
+                z-index: 1;
+            }
+
+            .image-area img {
+                z-index: 2;
+                position: relative;
+                height: 26vh;
+            }
+    </style>
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb breadcrumb-style1">
+        <li class="breadcrumb-item">
+            <a asp-area="admin" asp-controller="home" asp-action="index">Trang chủ</a>
+        </li>
+        <li class="breadcrumb-item active">Danh sách bài viết</li>
+        <li class="breadcrumb-item active">Sửa bài viết</li>
+
+    </ol>
+</nav>
+
+<div>
+    <form action="/admin/blogs/@Model.Id/edit" method="post" enctype="multipart/form-data">
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+
+            <div class="d-flex flex-column justify-content-center">
+                <h4 class="mb-1 mt-3">Sửa </h4>
+
+            </div>
+            <div class="d-flex align-content-center flex-wrap gap-3">
+                <a href="/admin/blogs" class="btn btn-secondary">Quay lại</a>
+                <button type="submit" class="btn btn-primary">Cập nhật </button>
+            </div>
+
+        </div>
+        <div class="row">
+
+            <!-- First column-->
+            <div class="col-8 col-lg-8">
+                <!-- Product Information -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="card-tile mb-0">Thông tin bài viết</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <input type="hidden" class="form-control" id="ecommerce-product-name" asp-for="UserId" required>
+                            <input type="hidden" class="form-control" id="ecommerce-product-name" asp-for="CreatedAt" required>
+                            <input type="hidden" asp-for="Thumb" />
+
+                            <label class="form-label" for="ecommerce-product-name">Tên tiêu đề</label>
+                            <input type="text" class="form-control" id="ecommerce-product-name" placeholder="Blog title" asp-for="Title" aria-label="Blog title" required>
+                        </div>
+                        <!-- Description -->
+                        <div>
+                            <label class="form-label">Nội dung phụ <span class="text-muted"></span></label>
+                            <div class="form-control p-0 pt-1">
+                                <textarea style="height:100px" class="form-control" asp-for="Scontent" placeholder="Nhập...." required></textarea>
+                                <span class="text-danger"></span>
+
+                            </div>
+                        </div>
+                        <div>
+                            <label class="form-label">Nội dung chính <span class="text-muted"></span></label>
+                            <div class="form-control p-0 pt-1">
+                                <textarea style="height:200px" class="form-control" asp-for="Content" placeholder="Nhập...." required></textarea>
+                                <span class="text-danger"></span>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Product Information -->
+
+
+
+            </div>
+            <!-- /Second column -->
+            <!-- Second column -->
+            <div class="col-4 col-lg-4">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="card-tile mb-0">Chế độ hiển thị</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group mr-sm-2 ml-sm-2">
+                            <label class="col-form-label">Trạng thái:</label>
+                            <div class="">
+                                <div class="row m-1 mt-0 mb-0">
+                                    <div class="form-check form-switch col-lg-12">
+                                        <input class="form-check-input" type="checkbox" asp-for="Published" />
+                                        <label class="form-check-label" for="flexSwitchCheckDefault">Công khai</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Media -->
+                <div class="card mb-4">
+                    <div class="row py-4">
+                        <div class="col-lg-12 mx-auto ps-4 pe-4">
+                            <p>Tải hình ảnh lên<span>*</span></p>
+                            <!-- Upload image input-->
+                            <div class="input-group mb-3 px-2 py-2 rounded-pill bg-white shadow-sm">
+                                <input asp-for="Thumb" name="fThumb" id="upload" type="file" onchange="readURL(this);" class="form-control border-0">
+                                <label id="upload-label" for="upload" class="font-weight-light text-muted">Chọn tệp</label>
+                                <div class="input-group-append">
+                                    <label for="upload" class="btn btn-light m-0 rounded-pill px-4"> <i class="fa fa-cloud-upload mr-2 text-muted"></i><small class="text-uppercase font-weight-bold text-muted">Chọn tệp</small></label>
+                                </div>
+                            </div>
+                            <!-- Uploaded image area-->
+                            <p class="font-italic text-grey text-center">Hình ảnh sẽ được hiển thị bên dưới.</p>
+                            <div class="image-area mt-4"><img id="imageResult" src="/images/blogs/@Model.Thumb" alt="" class="img-fluid rounded shadow-sm mx-auto d-block"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Media -->
+            </div>
+            <!-- /Second column -->
+        </div>
+    </form>
+
+
+</div>
+
+@section Scripts{
+
+    <script src="~/assets/js/multiple_images.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#summernote").summernote().code();
+
+            $('#summernote').summernote({
+                placeholder: 'Nhập...',
+                sanitize: false,
+                tabsize: 2,
+                fontNames: ['"Cairo",sans-serif', 'Times New Roman', 'Courier New'],
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'underline', 'clear']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['table', ['table']],
+                    ['insert', ['link', 'picture', 'video']],
+                    ['view', ['fullscreen', 'codeview', 'help']]
+                ],
+                height: 300,                 // set editor height
+                focus: true,
+                callbacks: {
+                    onInit: function (c) {
+                        c.editable.html('');
+                    }
+                }
+            });
+        });
+    </script>
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#imageResult')
+                        .attr('src', e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $(function () {
+            $('#upload').on('change', function () {
+                readURL(input);
+            });
+        });
+
+        /*  ==========================================
+            SHOW UPLOADED IMAGE NAME
+        * ========================================== */
+        var input = document.getElementById('upload');
+        var infoArea = document.getElementById('upload-label');
+
+        input.addEventListener('change', showFileName);
+        function showFileName(event) {
+            var input = event.srcElement;
+            var fileName = input.files[0].name;
+            infoArea.textContent = 'File name: ' + fileName;
+        }
+    </script>
+ }
+

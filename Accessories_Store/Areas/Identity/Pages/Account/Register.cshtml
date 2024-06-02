@@ -1,0 +1,74 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+    Layout = "/Areas/Identity/Pages/Shared/_IdentityLayout.cshtml";
+}
+
+<div class="container-xxl">
+    <div class="authentication-wrapper authentication-basic container-p-y">
+        <div class="authentication-inner">
+            <!-- Register Card -->
+            <div class="card">
+                <div class="card-body">
+                    <!-- Logo -->
+                    <div class="app-brand d-flex align-items-center flex-column">
+                        <a href="/" class="app-brand-link gap-2 mb-2">
+                            <img src="~/assets/images/logo/Logo_Minine SRE.jpg" alt="NHT Shop" width="180px" />
+                        </a>
+                        <h4 class="mb-2">Chào mừng bạn đến với Minine Accessories 🚀</h4>
+                        <p class="mb-4">Giúp việc mua sắm của bạn trở nên dễ dàng hơn!</p>
+                    </div>
+                    <!-- /Logo -->
+                    
+
+                    <form id="registerForm" class="mb-3" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                        <div class="mb-3">
+                            <label class="form-label">Họ tên</label>
+                            <input type="text" class="form-control" asp-for="Input.FullName" placeholder="Nhập họ tên" autofocus />
+                            <span asp-validation-for="Input.FullName" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="text" class="form-control" asp-for="Input.Email" placeholder="Nhập email" autofocus />
+                            <span asp-validation-for="Input.Email" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3 form-password-toggle">
+                            <label class="form-label">Mật khẩu</label>
+                            <div class="input-group input-group-merge">
+                                <input type="password" class="form-control" asp-for="Input.Password" autocomplete="new-password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" />
+                                <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                            </div>
+                            <span asp-validation-for="Input.Password" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3 form-password-toggle">
+                            <label class="form-label">Nhập lại mật khẩu</label>
+                            <div class="input-group input-group-merge">
+                                <input type="password" class="form-control" asp-for="Input.ConfirmPassword" autocomplete="new-password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" />
+                                <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                            </div>
+                            <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3" style="margin-left:1vw">
+                            <div class="form-check">
+                                <input required class="form-check-input" type="checkbox" id="terms-conditions" name="terms" />
+                                <label class="form-check-label" for="terms-conditions">Tôi đồng ý với <a href="javascript:void(0);">điều khoản</a></label>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary d-grid w-100">Đăng ký</button>
+                    </form>
+
+                    <p class="text-center">
+                        <span>Bạn đã có tài khoản?</span>
+                        <a asp-area="Identity" asp-controller="Account" asp-action="Login"><span>Đăng nhập ngay</span></a>
+                    </p>
+                </div>
+            </div>
+            <!-- Register Card -->
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

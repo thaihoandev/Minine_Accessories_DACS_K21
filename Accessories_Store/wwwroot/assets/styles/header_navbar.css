@@ -1,0 +1,117 @@
+@charset "utf-8";
+/* CSS Document */
+
+/******************************
+
+[Table of Contents]
+
+1. Fonts
+2. Body and some general stuff
+3. Header
+	3.1 Header - Logo
+	3.2 Header - Main Navigation
+	3.3 Header - Search
+	3.4 Header - Shopping
+	3.5 Header - Burger
+4. Home
+5. Menu
+6. Cart
+7. Options
+8. Newsletter
+9. Footer
+
+
+******************************/
+.navbar {
+	background: #fff;
+	padding-top: 0;
+	padding-bottom: 0;
+	box-shadow: 1px 3px 4px 0 #adadad33;
+	width: 100%;
+	color: #343a40 !important;
+	margin-top:-2.5vh;
+}
+
+.navbar-light .navbar-brand {
+	color: #2196F3;
+}
+
+.navbar-light .navbar-nav .nav-link {
+	color: #343a40;
+}
+
+.navbar-light .navbar-brand:focus, .navbar-light .navbar-brand:hover {
+	color: #343a40;
+}
+
+.navbar-light .navbar-nav .nav-link:focus, .navbar-light .navbar-nav .nav-link:hover {
+	color: #fff;
+
+}
+
+.navbar-light .navbar-nav .nav-link {
+	padding-top: 10px;
+	padding-bottom: 10px;
+	transition: 0.3s;
+	padding-left: 24px;
+	padding-right: 24px;
+	font-size: 14px;
+}
+
+	.navbar-light .navbar-nav .nav-link:focus, .navbar-light .navbar-nav .nav-link:hover {
+		background: #937c6f;
+		transition: 0.3s;
+		
+	}
+
+.dropdown-item:focus, .dropdown-item:hover {
+	color: #fff;
+	text-decoration: none;
+	background-color: #937c6f !important;
+}
+
+.sm-menu {
+	border-radius: 0px;
+	border: 0px;
+	top: 97%;
+	box-shadow: rgba(173, 173, 173, 0.2) 1px 3px 4px 0px;
+}
+
+.dropdown-item {
+	color: #3c3c3c;
+	font-size: 14px;
+}
+
+	.dropdown-item.active, .dropdown-item:active {
+		color: #fff;
+		text-decoration: none;
+		background-color: #2196F3;
+	}
+
+.navbar-toggler {
+	outline: none !important;
+}
+
+.navbar-tog {
+	color: #1ebdc2;
+}
+
+.megamenu-li {
+	position: static;
+}
+
+.megamenu {
+	position: absolute;
+	width: 100%;
+	left: 0;
+	right: 0;
+	padding: 15px;
+}
+
+	.megamenu h6 {
+		margin-left: 21px;
+	}
+
+	.megamenu i {
+		width: 20px;
+	}

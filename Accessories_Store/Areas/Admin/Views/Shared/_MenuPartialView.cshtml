@@ -1,0 +1,180 @@
+﻿
+
+<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+    <div class="app-brand demo">
+        <a href="/admin" style="height:30px; width:auto" class="app-brand-link">
+                <img src="~/assets/images/logo/Logo_Minine SRE.jpg" style="height:100%; width:100%; object-fit:cover" />
+        </a>
+
+        <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+            <i class="bx bx-chevron-left bx-sm align-middle"></i>
+        </a>
+    </div>
+
+    <div class="menu-inner-shadow"></div>
+
+    <ul class="menu-inner py-1">
+        <!-- Dashboards -->
+        <li class="menu-item active open">
+            <a href="/admin" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                <div data-i18n="Dashboards">Dashboards</div>
+                <div class="badge bg-danger rounded-pill ms-auto">5</div>
+            </a>
+            
+        </li>
+
+        <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">Sản phẩm</span>
+        </li>
+
+        <!-- Products -->
+        <li class="menu-item">
+            <a href="" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-dock-top"></i>
+                <div data-i18n="Account Settings">Quản lý sản phẩm</div>
+            </a>
+            <ul class="menu-sub">
+                <li class="menu-item">
+                    <a href="/admin/products" class="menu-link">
+                        <div data-i18n="Account">Danh sách sản phẩm</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="/admin/materials" class="menu-link">
+                        <div data-i18n="Account">Quản lý chất liệu</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-lock-open-alt"></i>
+                <div data-i18n="Authentications">Quản lý danh mục</div>
+            </a>
+            <ul class="menu-sub">
+                <li class="menu-item">
+                    <a href="/admin/categories/type" class="menu-link">
+                        <div data-i18n="Basic">Loại danh mục</div>
+                    </a>
+                </li>
+
+                <li class="menu-item">
+                    <a href="/admin/categories" class="menu-link">
+                        <div data-i18n="Basic">Danh sách danh mục</div>
+                    </a>
+                </li>
+                
+            </ul>
+            
+        </li>
+        <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-lock-open-alt"></i>
+                <div data-i18n="Authentications">Quản lý ưu đãi</div>
+            </a>
+            <ul class="menu-sub">
+                <li class="menu-item">
+                    <a href="/admin/vouchers" class="menu-link">
+                        <div data-i18n="Basic">Ưu đãi đơn hàng</div>
+                    </a>
+                </li>
+
+            </ul>
+        </li>
+        <!-- Orders -->
+        <li class="menu-header small text-uppercase"><span class="menu-header-text">Đơn hàng</span></li>
+        
+        <!-- User interface -->
+        <li class="menu-item">
+            <a href="javascript:void(0)" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-box"></i>
+                <div data-i18n="User interface">Quản lý đơn hàng</div>
+            </a>
+            <ul class="menu-sub">
+                <li class="menu-item">
+                    <a href="/admin/orders" class="menu-link">
+                        <div data-i18n="Accordion">Danh sách đơn hàng</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+
+        <!-- Pages -->
+        <li class="menu-header small text-uppercase"><span class="menu-header-text">Trang</span></li>
+        <!-- Pages -->
+        <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-detail"></i>
+                <div data-i18n="Form Elements">Quản lý bài viết</div>
+            </a>
+            <ul class="menu-sub">
+                <li class="menu-item">
+                    <a href="/admin/blogs" class="menu-link">
+                        <div data-i18n="Basic Inputs">Danh sách bài viết</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link ">
+                <i class="menu-icon tf-icons bx bx-detail"></i>
+                <div data-i18n="Form Layouts">Quản lý trang</div>
+            </a>
+            
+        </li>
+        <li class="menu-item">
+            <a href="/admin/slides" class="menu-link ">
+                <i class="menu-icon tf-icons bx bx-detail"></i>
+                <div data-i18n="Form Layouts">Quản lý slide</div>
+            </a>
+
+        </li>
+        <!-- Accounts -->
+        <li class="menu-header small text-uppercase"><span class="menu-header-text">Tài khoản</span></li>
+        <!-- Accounts -->
+        <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-detail"></i>
+                <div data-i18n="Form Elements">Quản lý tài khoản</div>
+            </a>
+            <ul class="menu-sub">
+                <li class="menu-item">
+                    <a href="/admin/accounts/admin" class="menu-link">
+                        <div data-i18n="Basic Inputs">Quản trị viên</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="/admin/accounts/customer" class="menu-link">
+                        <div data-i18n="Input groups">Khách hàng</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li class="menu-item">
+            <a href="/admin/contacts" class="menu-link ">
+                <i class="menu-icon tf-icons bx bx-detail"></i>
+                <div data-i18n="Form Layouts">Danh sách liên hệ</div>
+            </a>
+
+        </li>
+        <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link ">
+                <i class="menu-icon tf-icons bx bx-detail"></i>
+                <div data-i18n="Form Layouts">Phân quyền</div>
+            </a>
+
+        </li>
+        <!-- System -->
+        <li class="menu-header small text-uppercase"><span class="menu-header-text">Hệ thống</span></li>
+        
+        <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link ">
+                <i class="menu-icon tf-icons bx bx-detail"></i>
+                <div data-i18n="Form Layouts">...</div>
+            </a>
+
+        </li>
+    </ul>
+</aside>
