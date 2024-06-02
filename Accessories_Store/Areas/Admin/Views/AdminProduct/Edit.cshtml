@@ -1,0 +1,518 @@
+﻿@model Accessories_Store.Models.Entities.Product
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+@section Styles {
+    <link href="~/adminAssets/summernote-0.8.18-dist/summernote-bs4.css" rel="stylesheet">
+    <link href="~/adminAssets/summernote-0.8.18-dist/summernote.css" rel="stylesheet">
+    <style>
+    #upload {
+        opacity: 0;
+    }
+
+    #upload-label {
+        position: absolute;
+        top: 50%;
+        left: 1rem;
+        transform: translateY(-50%);
+    }
+
+    .image-area {
+        border: 2px dashed rgba(255, 255, 255, 0.7);
+        padding: 1rem;
+        position: relative;
+    }
+
+        .image-area::before {
+            content: 'Uploaded image result';
+            color: #fff;
+            font-weight: bold;
+            text-transform: uppercase;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 0.8rem;
+            z-index: 1;
+        }
+
+        .image-area img {
+            z-index: 2;
+            position: relative;
+            height:26vh;
+        }
+</style>
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb breadcrumb-style1">
+        <li class="breadcrumb-item">
+            <a asp-area="admin" asp-controller="home" asp-action="index">Trang chủ</a>
+        </li>
+        <li class="breadcrumb-item active"><a href="/admin/products">Danh sách sản phẩm</a></li>
+        <li class="breadcrumb-item active">Cập nhật sản phẩm</li>
+
+    </ol>
+</nav>
+
+<div>
+    <form action="/admin/products/@Model.Id/edit" method="post" enctype="multipart/form-data">
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+
+            <div class="d-flex flex-column justify-content-center">
+                <h4 class="mb-1 mt-3">Cập nhật sản phẩm</h4>
+                <p class="text-muted">Đơn đặt hàng được đặt trên cửa hàng của bạn</p>
+            </div>
+            <div class="d-flex align-content-center flex-wrap gap-3">
+                <a href="/admin/products" class="btn btn-secondary">Quay lại</a>
+                <button type="submit" class="btn btn-primary">Cập nhật sản phẩm</button>
+            </div>
+
+        </div>
+        <div class="row">
+
+            <!-- First column-->
+            <div class="col-8 col-lg-8">
+                <input type="hidden" asp-for="CreatedAt" />
+              <!-- Product Information -->
+              <div class="card mb-4">
+                <div class="card-header">
+                  <h5 class="card-tile mb-0">Thông tin sản phẩm</h5>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                      <div class=" col-lg-12 mb-3">
+                          <div class="row">
+                              <div class="col-lg-6">
+                                  <label class="form-label" for="ecommerce-product-name">Tên</label>
+                                        <input type="text" class="form-control" id="ecommerce-product-name" placeholder="Product title" asp-for="Name" aria-label="Product title">
+                              </div>
+                              <div class="col-lg-6">
+                                    <div class="">
+                            
+                                        <div class="form-group mr-sm-2 ml-sm-2  col-sm-12">
+                                            <label class="col-form-label">Trạng thái:</label>
+                                            <div class="">
+                                                <div class="row m-1 mt-0 mb-0">
+                                                    <div class="form-check form-switch col-lg-12">
+                                                        <input class="form-check-input" type="checkbox" asp-for="Published" />
+                                                        <label class="form-check-label" for="flexSwitchCheckDefault">Công khai</label>
+                                                    </div>
+                                                    <div class="form-check form-switch col-lg-12">
+                                                        <input class="form-check-input" type="checkbox" asp-for="Homeflag" />
+                                                        <label class="form-check-label" for="flexSwitchCheckDefault">HomeFlag</label>
+                                                    </div>
+                                                    <div class="form-check form-switch col-lg-12">
+                                                        <input class="form-check-input" type="checkbox" asp-for="Newfeed" />
+                                                        <label class="form-check-label" for="flexSwitchCheckDefault">Newfeed</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                          </div>
+                        
+                      </div>
+                      <!-- Description -->
+                      <div class="col-lg-12">
+                        <label class="form-label">Mô tả <span class="text-muted">(Bắt buộc)</span></label>
+                        <div class="form-control p-0 pt-1">
+                            <textarea  class="form-control" asp-for="Description" placeholder="Nhập...."></textarea>
+                            <span  class="text-danger"></span>
+              
+                        </div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+              <!-- /Product Information -->
+              
+                <div class="card mb-4">
+                    <div class="row">
+                        
+                        <div class="col-lg-6">
+                            <div class="card-header">
+                                <h5 class="card-tile mb-0">Hình ảnh</h5>
+                            </div>
+                            <div class="card-body">
+                                <!-- Media -->
+                                  <div class="card mb-4">
+                                    <div class="row py-4">
+                                            <div class="col-lg-12 mx-auto ps-4 pe-4">
+                                                <p>Tải hình ảnh lên<span>*</span></p>
+                                                <!-- Upload image input-->
+                                                <div class="input-group mb-3 px-2 py-2 rounded-pill bg-white shadow-sm">
+                                                    <input asp-for="Thumb" name="fThumb" id="upload" type="file" onchange="readURL(this);" class="form-control border-0">
+                                                    <label id="upload-label"  for="upload" class="font-weight-light text-muted">Chọn tệp</label>
+                                                    <div class="input-group-append">
+                                                        <label for="upload" class="btn btn-light m-0 rounded-pill px-4"> <i class="fa fa-cloud-upload mr-2 text-muted"></i><small class="text-uppercase font-weight-bold text-muted">Chọn tệp</small></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12 mx-auto">
+                                                <!-- Uploaded image area-->
+                                                <p class="font-italic text-grey text-center">Hình ảnh sẽ được hiển thị bên dưới.</p>
+                                                <div class="image-area mt-1"><img id="imageResult" src="~/images/products/@Model.Thumb" alt="@Model.Name" class="img-fluid rounded shadow-sm mx-auto d-block"></div>
+
+                                            </div>
+                                        </div>
+                                  </div>
+                                  <!-- /Media -->
+                            </div>
+                        </div>
+                       
+                        <div class="col-lg-6 mx-auto ps-4 pe-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-tile mb-0">Hình ảnh chi tiết sản phẩm</h5>
+                                </div>
+                                <div class="card-body row">
+                                    <input type="hidden" asp-for="Thumb" />
+                                    <!-- Media -->
+                                      @foreach(var item in Model.ProductImages)
+                                        {
+                                            <div id="image-@item.Id" class="ratio ratio-1x1 me-2 mb-2" style="width: 120px; position:relative">
+                                                <img src="~/images/products/product-details/@item.Path" class="object-fit-cover" alt="@item.Product.Name" />
+                                                <div class="form-floating">
+                                                    <a  class="btnDeleteImg d-flex align-items-center justify-content-center"
+                                                        style="color: #000; cursor: pointer; position: absolute;
+                                                                top: 3px; right: 3px; width: 15px; height: 15px;
+                                                                border-radius: 3px; border: 1px solid #000;
+                                                                background-color: #f0f0f0;"
+                                                        data-id="@item.Id">
+                                                        <i class="bx bx-x" style="font-size: 8px;"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        }
+                                        <input type="file" class="form-control mt-3 image-input" name="images" asp-for="ProductImages" multiple />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /Second column -->
+
+            <!-- Second column -->
+            <div class="col-4 col-lg-4">
+                <div class="card mb-4">
+                  <div class="card-header">
+                    <h5 class="card-title mb-0">Chất liệu</h5>
+                  </div>
+                  <div class="card-body">
+                  <!-- Vendor -->
+                      <div class="mb-3 col ecommerce-select2-dropdown">
+                        <label class="form-label mb-1" for="vendor">
+                          Chất liệu
+                        </label>
+                        <div class="position-relative"><select id="vendor" class="select2 form-select select2-hidden-accessible" asp-for="ProductMaterialId" asp-items="ViewBag.ChatLieu" tabindex="-1" aria-hidden="true">
+                          <option value="" selected disabled>Chọn chất liệu</option>
+                          
+                        </select></div>
+                    </div>
+                  
+                  </div>
+                </div>
+              <!-- Organize Card -->
+              <div class="card mb-4">
+                <div class="card-header">
+                  <h5 class="card-title mb-0">Phân loại</h5>
+                </div>
+                <div class="card-body">
+                  <!-- Vendor -->
+                  <div class="mb-3 col ecommerce-select2-dropdown">
+                    <label class="form-label mb-1" for="vendor">
+                      Đối tượng
+                    </label>
+                    <div class="position-relative">
+                        <select class="form-select select2 select2-hidden-accessible" asp-for="ProductObjectId" asp-items="ViewBag.DoiTuong">
+                            <option  selected>Chọn đối tượng</option>
+
+                        </select>
+                    </div>
+                  </div>
+                  <!-- Category -->
+                  <div class="mb-3 col ecommerce-select2-dropdown">
+                    <label class="form-label mb-1 d-flex justify-content-between align-items-center" for="category-org">
+                      <span>Danh mục</span><a href="/admin/categories/add" class="fw-medium">Thêm danh mục</a>
+                    </label>
+                    <div class="position-relative">
+                        <select class="form-select select2 select2-hidden-accessible" asp-for="CategoryId" asp-items="ViewBag.DanhMuc">
+                            <option disabled selected>Chọn danh mục</option>
+
+                        </select>
+                    </div>
+                  </div>
+                  <!-- Collection -->
+                  <div class="mb-3 ecommerce-select2-dropdown">
+                    <label class="form-label mb-1" for="collection">Bộ sưu tập
+                    </label>
+                    <div class="position-relative">
+                        <select class="form-select select2 select2-hidden-accessible" asp-for="ProductCollectionId" asp-items="ViewBag.BoSuuTap">
+                            <option  selected>Chọn bộ sưu tập</option>
+
+                        </select>
+                    </div>
+                  </div>
+                  <!-- Tags -->
+                  <div class="mb-3">
+                    <label for="ecommerce-product-tags" class="form-label mb-1">Tags</label>
+                    <tags class="tagify  form-control" tabindex="-1">
+                    <tag title="Normal" contenteditable="false" spellcheck="false" tabindex="-1" class="tagify__tag tagify--noAnim" value="Normal"><x title="" class="tagify__tag__removeBtn" role="button" aria-label="remove tag"></x>
+                        <div>
+                            <span class="tagify__tag-text">Normal</span>
+                        </div>
+                    </tag>
+
+                    <span contenteditable="" tabindex="0" data-placeholder="​" aria-placeholder="" class="tagify__input" role="textbox" aria-autocomplete="both" aria-multiline="false"></span>
+                        ​
+                </tags><input id="ecommerce-product-tags" class="form-control" name="ecommerce-product-tags" value="Normal,Standard,Premium" aria-label="Product Tags" tabindex="-1">
+                  </div>
+                </div>
+              </div>
+              <div class="card mb-4">
+                    <div class="card-body">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label class="form-label" for="ecommerce-product-name">Ngày tạo</label>
+                                    <input type="text" disabled class="form-control" asp-for="CreatedAt" id="ecommerce-product-name"  aria-label="Product title">
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label" for="ecommerce-product-name">Ngày cập nhật</label>
+                                    <input type="text" disabled class="form-control" asp-for="UpdatedAt" id="ecommerce-product-name"  aria-label="Product title">
+                                </div>
+
+                            </div>
+                            
+                        </div>
+              <!-- /Organize Card -->
+              </div>
+            <!-- /Second column -->
+          </div>
+    </form>
+    <div class="row">
+        <div class="card mb-4">
+            <div class=" card-body d-flex flex-wrap justify-content-between align-items-center ">
+
+                <div class="d-flex flex-column justify-content-center">
+                    <h4 class="mb-1 mt-3">Thêm sản phẩm con</h4>
+                </div>
+                <div class="d-flex align-content-center flex-wrap gap-3">
+                    <a href="/admin/products/@Model.Id/add-details" class="btn btn-primary">Thêm</a>
+                </div>
+
+            </div>
+            <div class="table-responsive ">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Kích thước</th>
+                            <th scope="col">Giá</th>
+                            <th scope="col">Số lượng</th>
+                            <th scope="col">Trạng thái</th>
+                            <td scope="col">#</td>
+
+                        </tr>
+                    </thead>
+                    <tbody id="records_table">
+                        @if (Model != null)
+                        {
+                            foreach (var item in ViewBag.ItemList)
+                            {
+                                <tr>
+                                    <td>@item.Id</td>
+                                    <td>@item.ProductSize</td>
+                                    <td>
+                                        @item.Price.ToString("N0") đ
+                                    </td>
+                                    <td>@item.Quantity</td>
+   
+                                    <td>
+                                        @if(item.Status == 1)
+                                        {
+                                            <span class="badge bg-label-primary me-1">Published</span>
+                                        }
+                                        else
+                                        {
+                                        <span class="badge bg-label-danger me-1">InActived</span>
+                                        
+                                        }
+                                    </td>
+                                    <td>
+                                   
+                                        <div class="dropdown">
+                                            <a href="/admin/products/@Model.Id/edit-details/@item.Id" class="btn btn-sm btn-icon">
+                                                <i class="bx bx-edit"></i>
+                                            </a>
+                                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                                <i class="bx bx-dots-vertical-rounded"></i>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="/admin/products/@Model.Id/delete-details/@item.Id"><i class="bx bx-trash me-1"></i> Delete</a>
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                </tr>
+                            }
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+ @section Scripts{
+    <script src="~/adminAssets/summernote-0.8.18-dist/summernote-bs4.js"></script>
+    <script>
+        document.querySelectorAll('.image-input').forEach(input => {
+            let files = []; // Mảng để lưu trữ các tệp tin đã được chọn
+            input.addEventListener('change', async function (event) {
+                // Duyệt qua tất cả các tệp tin được chọn
+                for (const file of event.target.files) {
+                    files.push(file); // Thêm tệp tin vào mảng
+                    await new Promise(resolve => {
+                        const reader = new FileReader();
+                        reader.onload = function (e) {
+                            const img = document.createElement('img');
+                            img.src = e.target.result;
+                            img.alt = file.name;
+                            img.classList.add('object-fit-cover', 'preview-image');
+
+                            const div = document.createElement('div');
+                            div.classList.add('ratio', 'ratio-1x1', 'me-2', 'mb-2');
+                            div.style.width = '120px';
+                            div.style.position = 'relative';
+                            div.appendChild(img);
+
+                            const formFloating = document.createElement('div');
+                            formFloating.classList.add('form-floating');
+                            div.appendChild(formFloating);
+
+                            // Tạo nút X
+                            const button = document.createElement('button');
+                            button.classList.add('d-flex', 'align-items-center', 'justify-content-center');
+                            button.style.position = 'absolute';
+                            button.style.top = '3px';
+                            button.style.right = '3px';
+                            button.style.width = '20px';
+                            button.style.height = '20px';
+                            button.style.borderRadius = '3px';
+                            button.addEventListener('click', function () {
+                                div.remove();
+                                files = files.filter(f => f !== file); // Xóa tệp tin khỏi mảng
+                                const dataTransfer = new DataTransfer();
+                                files.forEach(f => dataTransfer.items.add(f));
+                                input.files = dataTransfer.files; // Cập nhật giá trị của input
+                            });
+                            formFloating.appendChild(button);
+
+                            const iconClose = document.createElement('i');
+                            iconClose.classList.add('bx', 'bx-x',);
+                            iconClose.style.fontSize = '8px';
+                            button.appendChild(iconClose);
+
+                            input.parentElement.insertBefore(div, input);
+
+                            resolve();
+                        };
+                        reader.readAsDataURL(file);
+                    });
+                }
+                // Cập nhật giá trị của input sau khi thêm tệp tin
+                const dataTransfer = new DataTransfer();
+                files.forEach(f => dataTransfer.items.add(f));
+                input.files = dataTransfer.files;
+            });
+        });
+    </script>
+     <script>
+        $(document).ready(function () {
+            $("#summernote").summernote().code();
+
+            $('#summernote').summernote({
+                placeholder: 'Nhập...',
+                sanitize: false,
+                tabsize: 2,
+                fontNames: ['"Cairo",sans-serif', 'Times New Roman', 'Courier New'],
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'underline', 'clear']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['table', ['table']],
+                    ['insert', ['link', 'picture', 'video']],
+                    ['view', ['fullscreen', 'codeview', 'help']]
+                ],
+                height: 300,                 // set editor height
+                focus: true,
+                callbacks: {
+                    onInit: function (c) {
+                        c.editable.html('');
+                    }
+                }
+            });
+        });
+    </script>
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#imageResult')
+                        .attr('src', e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $(function () {
+            $('#upload').on('change', function () {
+                readURL(input);
+            });
+        });
+
+        /*  ==========================================
+            SHOW UPLOADED IMAGE NAME
+        * ========================================== */
+        var input = document.getElementById('upload');
+        var infoArea = document.getElementById('upload-label');
+
+        input.addEventListener('change', showFileName);
+        function showFileName(event) {
+            var input = event.srcElement;
+            var fileName = input.files[0].name;
+            infoArea.textContent = 'File name: ' + fileName;
+        }
+    </script>
+    <script>
+        $(document).ready(function () {
+            $(document).on('click', 'a.btnDeleteImg', function (e) {
+                e.preventDefault();
+
+                var imageId = $(this).data('id');
+
+                $.ajax({
+                    url: '/admin/products/delete-image',
+                    type: 'POST',
+                    data: { id: imageId },
+                    success: function () { $('#image-' + imageId).remove(); },
+                    error: function () { alert('An error occurred while trying to delete the image.'); }
+                });
+            });
+        });
+        
+        
+    </script>
+    
+ }
+
+

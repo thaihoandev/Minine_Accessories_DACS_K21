@@ -1,0 +1,20 @@
+﻿<link rel="stylesheet" type="text/css" href="~/assets/styles/main_styles.css">
+
+@model int
+@{
+    ViewData["Title"] = "OrderCompleted";
+}
+
+<div class="container " style="margin-top:200px; height:100vh">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h1 class="text-center mb-4">Đơn hàng đã đặt thành công</h1>
+            <p class="text-center">Cảm ơn bạn đã đặt hàng! Đơn hàng của bạn với mã số **@Model** đã được xác nhận thành công.</p>
+            <div class="text-center">
+                <p>Bạn có thể kiểm tra trạng thái đơn hàng của mình bất cứ lúc nào bằng cách truy cập trang "Theo dõi đơn hàng" trên trang web của chúng tôi.</p>
+                <p>Nếu bạn có bất kỳ câu hỏi nào, vui lòng liên hệ với chúng tôi qua email <a href="hoanthai1103@gmail.com">[email protected]</a> hoặc gọi điện đến số điện thoại chăm sóc khách hàng của chúng tôi: 1900 100x (x là 2 chữ số cuối của mã đơn hàng @Model).</p>
+            </div>
+        </div>
+    </div>
+</div>
+

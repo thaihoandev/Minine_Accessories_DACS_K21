@@ -1,0 +1,229 @@
+﻿@{
+	Layout = "~/Areas/User/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles{
+	<link rel="stylesheet" type="text/css" href="~/assets/styles/contact.css">
+	<link rel="stylesheet" type="text/css" href="~/assets/styles/contact_responsive.css">
+	<link rel="stylesheet" type="text/css" href="~/assets/styles/main_styles.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+}
+
+<!-- Home -->
+
+<div class="" style="height:34vh; position:relative;margin-top:13vh">
+	<div class="h-100" style="background-image:url('../assets/images/contact.jpg');object-fit:contain ; "></div>
+	<div class="container" style="position:absolute; top:18vh; left:20vw">
+		<div class="row">
+			<div class="col">
+				<div class="">
+					<div class="">
+						<div class="" style="font-size: 36px;
+											color: #FFFFFF;
+											line-height: 0.75;
+											font-family: 'Lucida', serif;">
+							Liên hệ
+						</div>
+						<div class="breadcrumbs" style="font-size: 16px;color: #FFFFFF;font-family: 'Lucida', serif;">
+							<ul>
+								<li><a href="index.html">Trang chủ</a></li>
+								<li><u>Liên hệ</u></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Google Map -->
+
+<div class="map">
+	<div id="google_map" class="google_map">
+		<div class="map_container">
+			<div id="map">
+				<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1903.1987767187738!2d106.79090586372286!3d10.892665583471038!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752d81d38ed371%3A0x571edeedf61a2fbe!2sBcons%20Plaza!5e0!3m2!1svi!2s!4v1714812335936!5m2!1svi!2s" style="border:0; width: 100%; height: 100%;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Contact Form -->
+
+<div class="contact">
+	<div class="container">
+		<div class="row">
+			<div class="col">
+				<div class="review_form_container">
+					<div class="review_form_title">Kết nối với chúng tôi</div>
+					<div class="review_form_content">
+						<form action="/contacts/submit-message" id="review_form" class="review_form">
+							<div class="d-flex flex-md-row flex-column align-items-start justify-content-between">
+								<input type="text" class="review_form_input" name="name" placeholder="Tên" required="required">
+								<input type="email" class="review_form_input" name="email" placeholder="E-mail" required="required">
+								<input type="text" class="review_form_input" name="phone" placeholder="Số điện thoại" required="required">
+							</div>
+							<div class="d-flex flex-md-row flex-column align-items-start justify-content-between">
+								<input type="text" class="review_form_input col mt-3" name="title" placeholder="Tiêu đề" required="required">
+							</div>
+							
+
+							<textarea class="review_form_text"  name="message" placeholder="Tin nhắn"></textarea>
+							<button type="submit" class="review_form_button">Gửi lời nhắn</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Contact Text -->
+
+<div class="contact_text">
+	<div class="container">
+		<div class="row">
+
+			<!-- Contact Info -->
+			<div class="col-lg-5">
+
+				<div class="contact_info">
+					<div class="contact_title">Thông tin liên hệ</div>
+					<div class="contact_info_content">
+						<ul>
+							<li>
+								<div class="contact_info_icon"><img src="images/contact_info_1.png" alt=""></div>
+								<div class="contact_info_text">22A/6 Thống Nhất, Dĩ An, Bình Dương</div>
+							</li>
+							<li>
+								<div class="contact_info_icon"><img src="images/contact_info_2.png" alt=""></div>
+								<div class="contact_info_text">hoanthai1103@gmail.com</div>
+							</li>
+							<li>
+								<div class="contact_info_icon"><img src="images/contact_info_3.png" alt=""></div>
+								<div class="contact_info_text">+84 916 491 863</div>
+							</li>
+						</ul>
+					</div>
+					<div class="contact_info_social">
+						<ul>
+							<li><a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a></li>
+							<li><a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li>
+							<li><a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+							<li><a href="#"><i class="fa fa-reddit-alien" aria-hidden="true"></i></a></li>
+							<li><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<!-- FAQ -->
+			<div class="col-lg-7">
+				<div class="faq">
+					<div class="contact_title">Câu hỏi thường gặp</div>
+					<div class="faq_content">
+
+						<!-- Accordions -->
+						<div class="accordions">
+
+							<div class="accordion_container">
+								<div class="accordion d-flex flex-row align-items-center"><div>Tôi sẽ nhận được ưu đãi đặc biệt gì khi mua hàng tại Minine Online?</div></div>
+								<div class="accordion_panel">
+									<p>
+										- Đa dạng các hình thức thanh toán & các chương trình ưu đãi từ đối tác liên kết thanh toán Payoo, Vnpay, Momo, Visa, Master Card….
+										<br />
+										- Linh hoạt các hình thức đặt hàng, giữ hàng Online & nhận hàng tại nhà hoặc nhận tại cửa hàng.
+										<br />
+										- Dịch vụ giao hàng miễn phí 3H, đảm bảo sản phẩm đến tay khách hàng trong vòng 3H & hoàn toàn miễn phí chỉ có tại Minine Online.
+									</p>
+								</div>
+							</div>
+
+							<div class="accordion_container">
+								<div class="accordion d-flex flex-row align-items-center"><div>Tôi đặt hàng thành công rồi, khi nào được xác nhận đơn hàng?</div></div>
+								<div class="accordion_panel">
+									<p>Quý khách hàng sẽ nhận được thông báo đơn hàng thành công ngay khi đặt hàng. Tư vấn viên Online sẽ liên hệ với Quý khách để xác nhận đơn hàng và thông báo về thời gian giao hàng Hoặc Quý khách sẽ nhận tin nhắn xác nhận đơn hàng thành công/hóa đơn điện tử/thông tin thời gian giao hàng dự kiến.</p>
+								</div>
+							</div>
+
+							<div class="accordion_container">
+								<div class="accordion d-flex flex-row align-items-center active"><div>Tôi mua hàng online nhưng không vừa, tôi có thể ghé cửa hàng đổi size (kích cỡ) được không?</div></div>
+								<div class="accordion_panel">
+									<p>
+										Chính sách thu đổi khi quý khách mua hàng tại trang web pnj.com.vn hoặc sàn Thương mại điện tử của Minine và tại cửa hàng đều như nhau.
+										<br />
+										+ Sản phẩm Bạc: đổi size (kích cỡ) trong vòng 72H đối với sản phẩm còn size, chưa hỗ trợ đổi sang mẫu khác và hoàn tiền
+										<br />
+										+ Sản phẩm Vàng: thu đổi 100% giá trị sản phẩm trong vòng 48H (với điều kiện đổi sang sản phẩm khác giá trị cao hơn hoặc bằng sản phẩm cũ, sau 48 tiếng Minine sẽ đổi sản phẩm theo chế độ thu đổi thông thường)
+										<br />
+
+										Lưu ý: thời gian được tính từ thời điểm khách hàng nhận được sản phẩm
+									</p>
+								</div>
+							</div>
+
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+@section Scripts{
+	<script src="~/assets/js/contact_custom.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+	<script>
+		$(document).ready(function () {
+			$('#review_form').on('submit', function (event) {
+				event.preventDefault(); // Prevent the default form submission
+
+				var formData = {
+					name: $('input[name="name"]').val(),
+					email: $('input[name="email"]').val(),
+					phone: $('input[name="phone"]').val(),
+					title: $('input[name="title"]').val(),
+					message: $('textarea[name="message"]').val()
+				};
+
+				$.ajax({
+					type: 'POST',
+					url: '/contacts/submit-message', // The endpoint where the form is submitted
+					data: JSON.stringify(formData),
+					contentType: 'application/json; charset=utf-8',
+					dataType: 'json',
+					encode: true,
+					success: function (response) {
+						// Handle the response from the server
+						if (response.success) {
+							Toastify({
+								text: "Gửi thành công!",
+								duration: 3000, // Thời gian hiển thị toast notification (ms)
+								gravity: "top-right", // Vị trí hiển thị
+								style: {
+									backgroundColor: "rgba(144, 238, 144, 0.7)",
+									height: "auto", // Độ cao tự động điều chỉnh
+									fontSize: "16px", // Kích thước của font chữ
+									alignItems: "center", // Căn giữa theo chiều dọc
+									padding: "14px" // Padding xung quanh nội dung của toast
+								}
+							}).showToast();
+							// Optionally clear the form fields
+							$('#review_form')[0].reset();
+						} else {
+							alert('Failed to send message: ' + response.error);
+						}
+					},
+					error: function (jqXHR, textStatus, errorThrown) {
+						// Handle any errors that occurred during the request
+						alert('An error occurred: ' + textStatus);
+					}
+				});
+			});
+		});
+	</script>
+
+}

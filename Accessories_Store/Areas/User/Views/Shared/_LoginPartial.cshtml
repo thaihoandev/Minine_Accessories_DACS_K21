@@ -1,0 +1,36 @@
+﻿@using Accessories_Store.Models.Entities;
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <a asp-area="identity" asp-page="/account/manage/index">
+        <div class="avatar">
+            <img src="~/assets/images/avatar.svg" alt="">
+        </div>
+    </a>
+    if (await UserManager.IsInRoleAsync(await UserManager.GetUserAsync(User), SD.Role_Admin))
+    {
+        <a class="" style="color:#666666" href="/admin">Admin</a>
+    }
+
+
+    <form class="d-inline-block" asp-area="identity" asp-page="/account/logout" asp-route-returnUrl="@Url.Action("index", "home", new { area = "" })">
+        <button style="color: #666666; font-size: 14px; padding: 0;" type="submit" class="btn btn-link">
+            Log out
+        </button>
+    </form>
+}
+else
+{
+    
+        <a class=" text-dark" id="register" asp-area="identity" asp-page="/account/register">Register</a>
+    
+    
+        <a class=" text-dark" id="login" asp-area="identity" asp-page="/account/login">Login</a>
+    
+}
+

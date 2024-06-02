@@ -1,0 +1,189 @@
+﻿
+@using Accessories_Store.Helpers;
+@using System.Linq;
+@using Accessories_Store.ViewModels;
+@inject Accessories_Store.Areas.Admin.Services.IProductVariantRepo IProductVariantRepo;
+@inject Accessories_Store.Areas.Admin.Services.ICategoryRepo ICategoryRepo;
+@inject Accessories_Store.Areas.Admin.Services.IProductMaterialRepo IProductMaterialRepo;
+
+
+@{
+    var cart = ViewContext.HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart");
+    var listAllCategory = await ICategoryRepo.GetAllAsync();
+    var listCategory = listAllCategory.Where(x => x.ParentId == -1 && x.TypeId == CategoryTypeStatus.CategoryStatus);
+    var listSubCategory = listAllCategory.Where(x => x.TypeId == CategoryTypeStatus.CollectionStatus);
+    var listObjectCategory = listAllCategory.Where(x => x.TypeId == CategoryTypeStatus.ObjectStatus);
+
+
+    var categoryCount = 0;
+}
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
+
+<script src="~/assets/js/header_navbar.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
+
+@section Styles{
+    <style>
+
+        /* Hover effect to extend the width of the <li> */
+        .product-link:hover {
+            background-color: #f0f0f0; /* Example background color on hover */
+        }
+    </style>
+}
+<script>
+    $(document).ready(function () {
+        $('#autocomplete').autocomplete({
+            source: '/search-by-name',
+            select: function (event, ui) {
+                $("#autocomplete").val(ui.item.id + ' - ' + ui.item.name);
+                return false;
+            }
+
+        })
+            .autocomplete("instance")._renderItem = function (ul, item) {
+
+                return $("<li>")
+                    .append("<a class='product-link' style='display:block; box-sizing:border-box; text-decoration: none;height=50px; width=100%; padding:12px'  href='/products/" + item.alias + "-" + item.id + " ' ><img class='product-img' src='/images/products/" + item.thumb + "' style='height:40px; width:40px  ;object-fit:cover'> &nbsp; " + item.id + " - " + item.name + "</a>")
+                    .appendTo(ul);
+            };
+    });
+</script>
+
+
+<header class="header">
+	<div class="header_inner d-flex flex-row align-items-center justify-content-start">
+		<div class="logo" style="height:30px; width:auto"><a href="~/"><img src="~/assets/images/logo/Logo_Minine SRE.jpg" style="height:100%; width:100%; object-fit:cover" /></a></div>
+		<div class="header_content ml-auto">
+			<div class="search header_search">
+				<form action="#">
+                    <input type="search" id="autocomplete" class="search_input" required="required" placeholder="Tìm kiếm sản phẩm">
+					<button type="submit" id="search_button" class="search_button"><img src="~/assets/images/magnifying-glass.svg" alt=""></button>
+				</form>
+			</div>
+			<div class="shopping">
+				<!-- Cart -->
+				<a href="/shopping-cart">
+					<div class="cart">
+						<img src="~/assets/images/shopping-bag.svg" alt="">
+						<div class="cart_num_container">
+							<div class="cart_num_inner">
+                                @if (@cart?.Items != null)
+                                {
+                                    <div class="cart_num">@cart?.Items.Count()</div>
+
+                                }
+                                else
+                                {
+                                    <div class="cart_num">0</div>
+
+                                }
+                                
+							</div>
+						</div>
+					</div>
+				</a>
+				<!-- Star -->
+				<a href="~/assets/#">
+					<div class="star">
+						<img src="~/assets/images/star.svg" alt="">
+						<div class="star_num_container">
+							<div class="star_num_inner">
+								<div class="star_num">0</div>
+							</div>
+						</div>
+					</div>
+				</a>
+				<!-- Avatar -->
+                @await Html.PartialAsync("/Areas/User/Views/Shared/_LoginPartial.cshtml")
+			</div>
+		</div>
+
+
+	</div>
+    <div class="header_inner d-flex flex-row align-items-center justify-content-start" style="">
+        
+        <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+            <div class="container">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mobile_nav" aria-controls="mobile_nav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="mobile_nav">
+                    <ul class="navbar-nav mr-auto mt-2 mt-lg-0 float-md-right">
+                    </ul>
+                    <ul class="navbar-nav navbar-light">
+                        <li class="nav-item"><a class="nav-link" href="#">Ưu đãi</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/accessories">Trang sức</a></li>
+                        <li class="nav-item dmenu dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Danh mục
+                            </a>
+                            <div class="dropdown-menu sm-menu" aria-labelledby="navbarDropdown">
+                                @foreach (var item in listCategory)
+                                {
+                                    categoryCount++;
+                                    if(item.ParentId == -1 && categoryCount<=6)
+                                    {
+                                        <a class="dropdown-item" href="/collections/@item.Alias">@item.Name</a>
+                                    }
+                                }
+                                
+                            </div>
+                        </li>
+                        <!--========-->
+                        <li class="nav-item dropdown megamenu-li dmenu">
+                            <a class="nav-link dropdown-toggle" href="" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tất cả trang sức</a>
+                            <div class="dropdown-menu megamenu sm-menu border-top" aria-labelledby="dropdown01">
+                                <div class="row">
+                                    <div class="col-sm-6 col-lg-3 border-right mb-4">
+                                        <h6>Chất liệu</h6>
+                                        @foreach (var item in IProductMaterialRepo.findAll())
+                                        {
+                                            <a class="dropdown-item" href="/collections/materials/@item.Alias"><i class="fab fa-magento"></i> @item.Name</a>
+
+                                        }
+                                    </div>
+                                    <div class="col-sm-6 col-lg-3 border-right mb-4">
+                                        <h6>Bộ sưu tập</h6>
+                                        @foreach (var item in listSubCategory)
+                                        {
+                                            <a class="dropdown-item" href="/collections/@item.Alias"><i class="fab fa-magento"></i> @item.Name</a>
+
+                                        }
+                                    </div>
+                                    <div class="col-sm-6 col-lg-3 border-right mb-4">
+                                        <h6>Đối tượng</h6>
+                                        @foreach (var item in listObjectCategory)
+                                        {
+                                            <a class="dropdown-item" href="/collections/@item.Alias"><i class="fab fa-magento"></i> @item.Name</a>
+
+                                        }
+                                    </div>
+                                    <div class="col-sm-6 col-lg-3 border-right mb-4">
+                                        <h6>Sản phẩm được làm thủ công!</h6>
+
+                                        <img height="230" width="240" style="object-fit:fill" src="~/assets/images/logo/Logo_Minine SRE.jpg" />
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <!--=========-->
+                        <li class="nav-item"><a class="nav-link" href="/contacts">Liên hệ</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/blogs">Bài viết</a></li>
+                        <li class="nav-item"><a class="nav-link" href="<?php echo siteURL;?>contact-us.php">...</a></li>
+
+                    </ul>
+                </div>
+            </div>
+                    
+        </nav>
+	</div>
+            
+	
+</header>
+
+

@@ -1,0 +1,381 @@
+﻿@using Accessories_Store.Helpers;
+@using Accessories_Store.Models.Entities;
+@using System.Linq;
+@using PagedList.Core;
+@model PagedList.Core.IPagedList<Product>
+@inject Accessories_Store.Areas.Admin.Services.IRatingRepo IRatingRepo;
+@inject Accessories_Store.Areas.Admin.Services.IProductRepo IProductRepo;
+
+@inject Accessories_Store.Areas.Admin.Services.ICategoryRepo ICategoryRepo;
+@inject Accessories_Store.Areas.Admin.Services.IProductMaterialRepo IProductMaterialRepo;
+
+
+@section Styles{
+	<link rel="stylesheet" type="text/css" href="~/assets/styles/categories.css">
+	<link rel="stylesheet" type="text/css" href="~/assets/styles/categories_responsive.css">
+
+	<link rel="stylesheet" type="text/css" href="~/assets/styles/main_styles.css">
+
+	<style>
+		
+	</style>
+	
+}
+@{
+	var listAllCategory = await ICategoryRepo.GetAllAsync();
+	var listCategory = listAllCategory.Where(x => x.ParentId == -1 && x.TypeId == CategoryTypeStatus.CollectionStatus);
+
+	var listProduct = await IProductRepo.GetAllAsync();
+	var listHotProduct = listProduct.Where(x=>x.ProductVariants.Count() >0).OrderByDescending(x => x.OrderDetails.Count()).ToList();
+
+
+	var categoryCount = 0;
+}
+
+<!-- Home -->
+
+<div class="" style="height:34vh; position:relative; margin-top:13vh">
+	<div class="h-100" style="background-image:url('../assets/images/categories.jpg');object-fit:contain ; "></div>
+	<div class="container" style="position:absolute; top:18vh; left:20vw">
+		<div class="row">
+			<div class="col">
+				<div class="">
+					<div class="">
+						<div class="" style="font-size: 36px;
+											color: #FFFFFF;
+											line-height: 0.75;
+											font-family: 'Lucida', serif;">
+							Trang sức
+						</div>
+						<div class="breadcrumbs" style="font-size: 16px;color: #FFFFFF;font-family: 'Lucida', serif;">
+							<ul>
+								<li><a href="index.html">Trang chủ</a></li>
+								<li><u>Trang sức</u></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Products -->
+
+<div class="products">
+	<div class="container">
+		<div class="row">
+			<div class="col-12">
+
+				<!-- Sidebar Left -->
+
+				<div class="sidebar_left clearfix">
+
+					<!-- Categories -->
+					<div class="sidebar_section">
+						<div class="sidebar_title">Danh mục</div>
+						<div class="sidebar_section_content">
+							<ul>
+								@foreach (var item in listCategory)
+								{
+									categoryCount++;
+									if (categoryCount <= 6)
+									{
+										<li><a href="/collections/@item.Alias">@item.Name</a></li>
+										
+									}
+								}
+							</ul>
+						</div>
+					</div>
+
+
+					<!-- Size -->
+					<div class="sidebar_section">
+						<div class="sidebar_title">Chất liệu</div>
+						<div class="sidebar_section_content">
+							<ul>
+								
+								@foreach (var item in IProductMaterialRepo.findAll())
+								{
+									<li><a href="/collections/materials/@item.Alias">@item.Name (@item.Products.Where(x=>x.ProductVariants.Count() >0).Count())</a></li>
+								}
+								
+								
+							</ul>
+						</div>
+					</div>
+
+
+					<!-- Best Sellers -->
+
+					<div class="sidebar_section">
+						<div class="sidebar_title">Lựa chọn hàng đầu</div>
+						<div class="sidebar_section_content bestsellers_content">
+							<ul>
+								@{
+									int countListHotProduct = 0;
+								}
+								@foreach (var item in listHotProduct)
+								{
+									countListHotProduct++;
+									@if (countListHotProduct < 7)
+									{
+										<li class="clearfix">
+											<div class="best_image"><img style="height:100%; width:100%" src="~/images/products/@item.Thumb" alt=""></div>
+											<div class="best_content">
+												<div class="best_title"><a href="/products/@item.Alias-@item.Id">@item.Name</a></div>
+												<div class="best_price">
+
+													@if (@item.ProductVariants != null)
+													{
+														@item.ProductVariants.First().Price.Value.ToString("N0")
+													}
+													đ
+												</div>
+											</div>
+											<a href="/products/@item.Alias-@item.Id">
+
+											<div class="best_buy">+</div>
+											</a>
+										</li>
+									}
+									
+								}
+								<!-- Best Seller Item -->
+								
+
+							</ul>
+						</div>
+					</div>
+
+					<!-- Size -->
+					<div class="sidebar_section sidebar_options ">
+						<div class="sidebar_section_content">
+
+							<!-- Option Item -->
+							<div class="sidebar_option d-flex flex-row align-items-center justify-content-start">
+								<div class="option_image"><img src="~/assets/images/option_1.png" alt=""></div>
+								<div class="option_content">
+									<div class="option_title">30 Trả hàng</div>
+									<div class="option_subtitle">Dễ dàng đổi trả</div>
+								</div>
+							</div>
+
+							<!-- Option Item -->
+							<div class="sidebar_option d-flex flex-row align-items-center justify-content-start">
+								<div class="option_image"><img src="~/assets/images/option_2.png" alt=""></div>
+								<div class="option_content">
+									<div class="option_title">Miễn phí vận chuyển</div>
+									<div class="option_subtitle">Trên mọi đơn hàng</div>
+								</div>
+							</div>
+
+							<!-- Option Item -->
+							<div class="sidebar_option d-flex flex-row align-items-center justify-content-start">
+								<div class="option_image"><img src="~/assets/images/option_3.png" alt=""></div>
+								<div class="option_content">
+									<div class="option_title">Bảo mật thanh toán</div>
+									<div class="option_subtitle">Không phải lo lắng</div>
+								</div>
+							</div>
+
+							<!-- Option Item -->
+							<div class="sidebar_option d-flex flex-row align-items-center justify-content-start">
+								<div class="option_image"><img src="~/assets/images/option_4.png" alt=""></div>
+								<div class="option_content">
+									<div class="option_title">Hỗ trợ 24/7</div>
+									<div class="option_subtitle">Hãy gọi chúng tôi</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+
+				</div>
+			</div>
+			<div class="col-12">
+				<div class="product_sorting clearfix">
+					<div class="sorting">
+						<ul class="item_sorting">
+							<li>
+								<span class="sorting_text-price">Giá</span>
+								<i class="fa fa-caret-down" aria-hidden="true"></i>
+								<ul>
+									<li class="product_sorting_btn" data-min-price="0" data-max-price="1000000"><span>Dưới 1,000,000đ</span></li>
+									<li class="product_sorting_btn" data-min-price="1000001" data-max-price="2000000"><span>1,000,001đ - 2,000,000đ</span></li>
+									<li class="product_sorting_btn" data-min-price="2000001" data-max-price="3000000"><span>2,000,001đ - 3,000,000đ</span></li>
+									<li class="product_sorting_btn" data-min-price="3000001" data-max-price="4000000"><span>3,000,001đ - 4,000,000đ</span></li>
+									<li class="product_sorting_btn" data-min-price="4000001" data-max-price="100000000"><span>Trên 4,000,000đ</span></li>
+
+								</ul>
+							</li>
+							<li>
+								<span class="sorting_text-option">Show all</span>
+								<i class="fa fa-caret-down" aria-hidden="true"></i>
+								<ul>
+									<li class=" product_sorting_btn-option" data-option="all"><span>Xem tất cả</span></li>
+									<li class=" product_sorting_btn-option" data-option="price"><span>Giá</span></li>
+									<li class=" product_sorting_btn-option" data-option="rating"><span>Sao</span></li>
+								</ul>
+							</li>
+							
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row products_container">
+			<div class="col">
+
+				<!-- Products -->
+
+				<div class="row" id="product-list">
+					@foreach(var item in Model)
+					{
+						var variantId = @item.ProductVariants.First().Id;
+						 
+						var ratingSum = 0;
+						var ratingCount = 0;
+						var ratingAvg = 0;
+						var ratings = @IRatingRepo.findAllById(item.Id);
+						foreach (var rating in ratings)
+						{
+							ratingCount++;
+							ratingSum += rating.NumberStar;
+							ratingAvg = ratingSum / ratingCount;
+						}
+						<!-- Product -->
+						<div class="product col-lg-4">
+							<div class="product_image"><img src="~/images/products/@item.Thumb" alt=""></div>
+							<div class="rating rating_@ratingAvg" data-rating="@ratingAvg">
+								<i class="fa fa-star"></i>
+								<i class="fa fa-star"></i>
+								<i class="fa fa-star"></i>
+								<i class="fa fa-star"></i>
+								<i class="fa fa-star"></i>
+							</div>
+							<div class="product_content clearfix">
+								<div class="product_info">
+									<div class="product_name"><a href="/products/@item.Alias-@item.Id">@item.Name</a></div>
+									<div class="product_price">
+										@if (item.ProductVariants != null)
+										{
+											@item.ProductVariants.First().Price.Value.ToString("N0")
+										}
+										đ
+									</div>
+								</div>
+								<div class="product_options">
+									<div  id="addToCartBtn" class="product_buy product_option" >
+
+										<a href="/products/@item.Alias-@item.Id">
+											<img src="~/assets/images/shopping-bag-white.svg" alt="Add to Cart">
+										</a>
+									</div>
+									<div class="product_fav product_option">+</div>
+								</div>
+							</div>
+						</div>
+					}
+				</div>
+			</div>
+		</div>
+
+		<div class="row page_num_container">
+			<div class="col text-right">
+				<ul class="page_nums">
+					@for (int i = 1; i <= Model.PageCount; i++)
+					{
+						if (i == ViewBag.CurrentPage)
+						{
+							<li><a class="active" href="/accessories?page=@i">@i</a></li>
+						}
+						else
+						{
+							<li><a href="/accessories?page=@i">@i</a></li>
+
+						}
+					}
+				</ul>
+			</div>
+		</div>
+
+	</div>
+
+	<!-- Sidebar Right -->
+
+	<div class="sidebar_right clearfix">
+
+		<!-- Promo 1 -->
+		<div class="sidebar_promo_1 sidebar_promo d-flex flex-column align-items-center justify-content-center">
+			<div class="sidebar_promo_image" style="background-image: url(../assets/images/sidebar_promo_1.jpg)"></div>
+			<div class="sidebar_promo_content text-center">
+				<div class="sidebar_promo_title">30%<span>off</span></div>
+				<div class="sidebar_promo_subtitle">On all shoes</div>
+				<div class="sidebar_promo_button"><a href="checkout.html">check out</a></div>
+			</div>
+		</div>
+
+		<!-- Promo 2 -->
+		<div class="sidebar_promo_2 sidebar_promo">
+			<div class="sidebar_promo_image" style="background-image: url(../assets/images/sidebar_promo_2.jpg)"></div>
+			<div class="sidebar_promo_content text-center">
+				<div class="sidebar_promo_title">30%<span>off</span></div>
+				<div class="sidebar_promo_subtitle">On all shoes</div>
+				<div class="sidebar_promo_button"><a href="checkout.html">check out</a></div>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+<!-- Extra -->
+@section Scripts{
+	<script src="~/assets/js/categories_custom.js"></script>
+	<script>
+		$(document).ready(function () {
+			$('.product_sorting_btn').on('click', function () {
+				var minPrice = $(this).data('min-price');
+				var maxPrice = $(this).data('max-price');
+				var textPrice = $(this).text();
+				$('.sorting_text-price').text(textPrice);
+
+				$.ajax({
+					url: '/accessories/filter-product-by-price', // Update with your actual API endpoint
+					type: 'GET',
+					data: {
+						minPrice: minPrice,
+						maxPrice: maxPrice
+					},
+					success: function (response) {
+						$('#product-list').html(response);
+					},
+					error: function () {
+						alert('Error fetching data');
+					}
+				});
+			});
+			$('.product_sorting_btn-option').on('click', function () {
+				var option = $(this).data('option');
+
+				var textOption = $(this).text();
+				$('.sorting_text-option').text(textOption);
+
+				$.ajax({
+					url: '/accessories/filter-product-by-option', // Update with your actual API endpoint
+					type: 'GET',
+					data: {
+						option: option,
+					},
+					success: function (response) {
+						$('#product-list').html(response);
+					},
+					error: function () {
+						alert('Error fetching data');
+					}
+				});
+			});
+		});
+	</script>
+}

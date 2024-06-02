@@ -1,0 +1,141 @@
+﻿@model Accessories_Store.Models.Entities.Order
+@{
+    ViewData["ActivePage"] = "Chi tiết đơn hàng";
+    Layout = "/Areas/Identity/Pages/Account/Manage/_Layout.cshtml";
+}
+<div class="row">
+    <div class="col-12 col-lg-12">
+        <div class="row mb-4">
+            <div class="col-lg-8">
+                <div class=" card">
+                    <div class="card-header">
+                        <h6 class="card-title m-0">Thông tin người mua</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-start align-items-center mb-4">
+                            <div class="avatar me-2">
+                                <img src="~/images/users/@Model.ApplicationUser?.Avatar" alt="Avatar" class="rounded-circle">
+                            </div>
+                            <div class="d-flex flex-column">
+                                <a href="" class="text-body text-nowrap">
+                                    <h6 class="mb-0">@Model.Name</h6>
+                                </a>
+                                <small class="text-muted">Customer ID: #@Model.ApplicationUser?.Id</small>
+                            </div>
+                        </div>
+                        @* <div class="d-flex justify-content-start align-items-center mb-4">
+                        <span class="avatar rounded-circle bg-label-success me-2 d-flex align-items-center justify-content-center"><i class="bx bx-cart-alt bx-sm lh-sm"></i></span>
+                        <h6 class="text-body text-nowrap mb-0">12 Orders</h6>
+                        </div> *@
+                        <div class="d-flex justify-content-between">
+                            <h6>Thông tin liên hệ</h6>
+                            <h6><a href=" javascript:void(0)" data-bs-toggle="modal" data-bs-target="#editUser">Sửa</a></h6>
+                        </div>
+                        <p class=" mb-1">Email: @Model.ApplicationUser?.Email</p>
+                        <p class=" mb-0">Điện thoại: +84 916 491 863</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-4">
+
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between">
+                        <h6 class="card-title m-0">Địa chỉ giao hàng</h6>
+                        @* <h6 class="m-0"><a href=" javascript:void(0)" data-bs-toggle="modal" data-bs-target="#addNewAddress">Edit</a></h6> *@
+                    </div>
+                    <div class="card-body">
+                        <p class="mb-0">@Model.Address</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+       
+    </div>
+    <div class="col-12 col-lg-12">
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title m-0">Thông tin đơn hàng</h5>
+                @* <h6 class="m-0"><a href=" javascript:void(0)">Sửa</a></h6> *@
+            </div>
+            <div class="card-datatable table-responsive">
+                <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
+                    <table class="datatables-order-details table dataTable no-footer dtr-column" id="DataTables_Table_0" style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th class="control sorting_disabled dtr-hidden" rowspan="1" colspan="1" style="width: 0px; display: none;" aria-label=""></th>
+
+                                <th class="w-50 sorting_disabled" rowspan="1" colspan="1" style="width: 354px;" aria-label="products">
+                                    Sản phẩm
+
+                                </th>
+                                <th class="w-25 sorting_disabled" rowspan="1" colspan="1" aria-label="price">Kích cỡ</th>
+
+                                <th class="w-25 sorting_disabled" rowspan="1" colspan="1" aria-label="price">Giá</th>
+                                <th class="w-25 sorting_disabled" rowspan="1" colspan="1" aria-label="qty">Số lượng</th>
+                                <th class="sorting_disabled" rowspan="1" colspan="1" aria-label="total">Tổng</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.OrderDetails)
+                            {
+                                <tr class="odd">
+                                    <td class="  control" tabindex="0" style="display: none;"></td>
+
+                                    <td class="sorting_1">
+                                        <div class="d-flex justify-content-start align-items-center text-nowrap">
+                                            <div class="avatar-wrapper">
+                                                <div class="avatar me-2">
+                                                    <img src="~/images/products/@item.Product?.Thumb" alt="" class="rounded-2">
+                                                </div>
+                                            </div>
+                                            <div class="d-flex flex-column">
+                                                <h6 class="text-body mb-0">@item.Product?.Name</h6>
+                                                <small class="text-muted">@item.Product?.ProductMaterial?.Name</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span>@item.ProductSize cm</span>
+                                    </td>
+                                    <td>
+                                        <span>@item?.Price.Value.ToString("N0")đ</span>
+                                    </td>
+                                    <td>
+                                        <span class="text-body">@item.Quantity</span>
+                                    </td>
+                                    <td>
+                                        <h6 class="mb-0">@(item.Price * item.Quantity)đ</h6>
+                                    </td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="d-flex justify-content-end align-items-center m-3 mb-2 p-1">
+                    <div class="order-calculations">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="w-px-100">Tạm tính:</span>
+                            <span class="text-heading">@String.Format("{0:N0}",Model.TotalPrice) đ</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="w-px-100">Giảm giá:</span>
+                            <span class="text-heading mb-0">0</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="w-px-100">Phí:</span>
+                            <span class="text-heading">0</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <h6 class="w-px-100 mb-0">Tổng:</h6>
+                            <h6 class="mb-0">@Model.TotalPrice.Value.ToString("N0") đ</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>

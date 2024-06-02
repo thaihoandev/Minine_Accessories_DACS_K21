@@ -1,0 +1,398 @@
+﻿@using Accessories_Store.ViewModels;
+@model ShoppingCart
+
+
+@section Styles{
+
+	<link rel="stylesheet" type="text/css" href="~/assets/styles/cart.css">
+	<link rel="stylesheet" type="text/css" href="~/assets/styles/cart_responsive.css">
+	<link rel="stylesheet" type="text/css" href="~/assets/styles/main_styles.css">
+
+
+}
+@inject Accessories_Store.Areas.Admin.Services.IProductRepo IProductRepo
+@{
+	double? totalPrice = 0;
+}
+<!-- Home -->
+<!-- Home -->
+
+<div class="mt-5" style="height:34vh; position:relative">
+	<div class="h-100" style="background-image:url('../assets/images/cart.jpg');object-fit:contain ; "></div>
+	<div class="container" style="position:absolute; top:18vh; left:20vw">
+		<div class="row">
+			<div class="col">
+				<div class="">
+					<div class="">
+						<div class="" style="font-size: 36px;
+											color: #FFFFFF;
+											line-height: 0.75;
+											font-family: 'Lucida', serif;">
+							Giỏ hàng
+						</div>
+						<div class="breadcrumbs" style="font-size: 16px;color: #FFFFFF;font-family: 'Lucida', serif;">
+							<ul>
+								<li><a href="index.html">Home</a></li>
+								<li><u>Giỏ hàng</u></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Cart -->
+
+<div class="cart_container">
+	<div class="container">
+		<div class="row">
+			<div class="col">
+				<div class="cart_title">Giỏ hàng của bạn</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+				<div class="cart_bar d-flex flex-row align-items-center justify-content-start">
+					<div class="cart_bar_title_name">Sản phẩm</div>
+					<div class="cart_bar_title_content ml-auto">
+						<div class="cart_bar_title_content_inner d-flex flex-row align-items-center justify-content-end">
+							<div class="cart_bar_title_price">Kích cỡ</div>
+							<div class="cart_bar_title_price">Giá</div>
+							<div class="cart_bar_title_quantity">Số lượng</div>
+							<div class="cart_bar_title_total">Tổng</div>
+							<div class="cart_bar_title_button"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+				<div class="cart_products">
+					<ul>
+						@foreach(var item in Model.Items)
+						{
+							<li class=" cart_product d-flex flex-md-row flex-column align-items-md-center align-items-start justify-content-start" data-item-id="@item.Id">
+								<!-- Product Image -->
+								<div class="cart_product_image">
+									<img style="height: 8vh;width: 6vw;" src="~/images/products/@IProductRepo.GetByIdAsync(item.ProductId).Thumb" alt="">
+								</div>
+								<!-- Product Name -->
+								<input id="variantid_input" hidden disabled type="text" pattern="[0-9]*" value="@item.Id">
+								<div class="cart_product_name"><a href="product.html">@item.Name</a></div>
+								<div class="cart_product_info ml-auto">
+									<div class="cart_product_info_inner d-flex flex-row align-items-center justify-content-md-end justify-content-start">
+										<!-- Product ProductSize -->
+										<div class="cart_product_price">@item.ProductSize cm</div>
+										<!-- Product Price -->
+										<div class="cart_product_price">@String.Format("{0:N0}",@item.Price) đ</div>
+										<!-- Product Quantity -->
+										<div class="product_quantity_container">
+											<div class="product_quantity clearfix">
+												<input class="quantity_input" type="text" pattern="[0-9]*" value="@item.Quantity">
+												<div class="quantity_buttons">
+													<div id="quantity_inc_button" class="quantity_inc quantity_control"><i class="fa fa-caret-up" aria-hidden="true"></i></div>
+													<div id="quantity_dec_button" class="quantity_dec quantity_control"><i class="fa fa-caret-down" aria-hidden="true"></i></div>
+												</div>
+											</div>
+											<script>
+												function initQuantity() {
+													// Handle product quantity input
+													if ($('.product_quantity').length) {
+														var input = $('#quantity_input');
+														var incButton = $('#quantity_inc_button');
+														var decButton = $('#quantity_dec_button');
+
+														var originalVal;
+														var endVal;
+
+														incButton.on('click', function () {
+															originalVal = input.val();
+															endVal = parseFloat(originalVal) + 1;
+															@item.Quantity = endVal;
+														});
+
+														decButton.on('click', function () {
+															originalVal = input.val();
+															if (originalVal > 0) {
+																endVal = parseFloat(originalVal) - 1;
+																@item.Quantity = endVal;
+
+															}
+														});
+													}
+												}
+											</script>
+										</div>
+										<!-- Products Total Price -->
+										<div class="cart_product_total"> @String.Format("{0:N0}",item.Price * item.Quantity)đ</div>
+										<!-- Product Cart Trash Button -->
+										<div class="cart_product_button">
+											<button class="cart_product_remove"><img src="~/assets/images/trash.png" alt=""></button>
+										</div>
+									</div>
+								</div>
+							</li>
+						}
+						
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+				<div class="cart_control_bar d-flex flex-md-row flex-column align-items-start justify-content-start">
+					<button id="clearCartBtn" class="button_clear cart_button">Xóa giỏ hàng</button>
+					<button id="continueBuyBtn" class="button_update cart_button_2 ml-md-auto">Tiếp tục mua hàng</button>
+				</div>
+			</div>
+		</div>
+		<div class="row cart_extra">
+			<!-- Cart Coupon -->
+			<div class="col-lg-6">
+				<div class="cart_coupon">
+					<div class="cart_title">Mã giảm giá</div>
+					<form action="#" class="cart_coupon_form d-flex flex-row align-items-start justify-content-start" id="cart_coupon_form">
+						<input type="text" class="cart_coupon_input" id="coupon_code_input" placeholder="Coupon code">
+						<button class="button_clear cart_button_2" id="apply_coupon_button">Áp dụng mã</button>
+					</form>
+				</div>
+			</div>
+			<!-- Cart Total -->
+			<div class="col-lg-5 offset-lg-1">
+				<div class="cart_total">
+					<div class="cart_title">Tổng giỏ hàng</div>
+					<ul>
+						<li class="d-flex flex-row align-items-center justify-content-start">
+							<div class="cart_total_title">Tạm tính</div>
+							<div id="sub-cart-price" class="cart_total_price ml-auto">
+								@foreach (var item in Model.Items)
+								{
+									totalPrice += item.TotalPrice;
+								}
+								@String.Format("{0:N0}",totalPrice)đ
+							</div>
+						</li>
+						<li class="d-flex flex-row align-items-center justify-content-start">
+							<div class="cart_total_title">Phí vận chuyển</div>
+							<div class="cart_total_price ml-auto">Miễn phí vận chuyển</div>
+						</li>
+						<li class="d-flex flex-row align-items-center justify-content-start" id="discount_row" style="display: none;">
+							<div class="cart_total_title">Giảm giá</div>
+							<div id="discount_amount" class="cart_total_price ml-auto">0.00đ</div>
+						</li>
+						<li class="d-flex flex-row align-items-center justify-content-start">
+							<div class="cart_total_title">Tổng tiền</div>
+							<div id="total_price" class="cart_total_price ml-auto">@String.Format("{0:N0}",totalPrice)đ</div>
+						</li>
+					</ul>
+					@if (Model.Items.Count() == 0)
+					{
+						<button id="cancelCheckoutBtn" disabled style="opacity:0.6; cursor:not-allowed" class="cart_total_button" href="/shopping-cart">Chưa có sản phẩm</button>
+					}
+					else
+					{
+						<button id="proceedCheckoutBtn" class="cart_total_button">Tiến hành thanh toán</button>
+					}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+@section Scripts{
+	<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+	<script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
+	<script src="~/assets/js/cart_custom.js"></script>
+	<script>
+		$(document).ready(function () {
+			var quantityInput = $(".quantity_input");
+			// Xử lý sự kiện khi giá trị của input thay đổi
+			quantityInput.on("input", function () {
+				var currentValue = parseInt(quantityInput.val());
+				if (currentValue < 1 || isNaN(currentValue)) {
+					quantityInput.val(1);
+				}
+				var $cartProduct = $(this).closest('.cart_product');
+				var itemId = $cartProduct.data('item-id');
+				var quantityValue = $(this).val();
+				console.log(quantityValue);
+				console.log(itemId);
+				$.ajax({
+					url: '/cart/update-cart-item',
+					data: {
+						id: itemId,
+						currQuantity: quantityValue,
+					},
+					success: function (response) {
+						// Xử lý phản hồi từ máy chủ
+						// Ví dụ: hiển thị thông báo thành công
+						if (response.success) {
+							// Load lại danh sách sau khi cập nhật thành công
+							// Chọn phần tử chứa danh sách
+							var $cartProducts = $('.cart_products ul');
+							$cartProducts.empty();
+							// Thực hiện load lại danh sách
+							loadCartProducts(); // Gọi hàm loadCartProducts để load lại danh sách
+						}
+					},
+					error: function (xhr, status, error) {
+						// Xử lý lỗi nếu có
+					}
+				});
+
+			});
+
+			$('.cart_product_remove').on('click', function () {
+				var $cartProduct = $(this).closest('.cart_product');
+				var itemId = $cartProduct.data('item-id');
+
+				// Gửi yêu cầu AJAX
+				$.ajax({
+					url: '/cart/remove',
+					data: {
+						id: itemId,
+					},
+					success: function (response) {
+						// Xử lý phản hồi từ máy chủ
+						// Ví dụ: hiển thị thông báo thành công
+						if (response.success) {
+							// Xóa phần tử khỏi DOM
+							$cartProduct.remove();
+							loadCartProducts(); // Gọi hàm loadCartProducts để load lại danh sách
+
+						}
+					},
+					error: function (xhr, status, error) {
+						// Xử lý lỗi nếu có
+					}
+				});
+			});
+
+			$('#clearCartBtn').on('click', function () {
+				$.ajax({
+					url: '/cart/remove-all',
+					success: function (response) {
+						// Xử lý phản hồi từ máy chủ
+						// Ví dụ: hiển thị thông báo thành công
+						if (response.success) {
+							// Load lại danh sách sau khi xóa thành công
+							// Chọn phần tử chứa danh sách
+							var $cartProducts = $('.cart_products ul');
+							// Xóa nội dung của danh sách
+							$cartProducts.empty();
+							// Thực hiện load lại danh sách
+							loadCartProducts(); // Gọi hàm loadCartProducts để load lại danh sách
+						}
+					},
+					error: function (xhr, status, error) {
+						// Xử lý lỗi nếu có
+					}
+				});
+			})
+			$('#continueBuyBtn').on('click', function () {
+				window.location.href = '/accessories';
+			})
+			$('#proceedCheckoutBtn').on('click', function () {
+				window.location.href = '/cart/check-out';
+			})
+			// Hàm để load lại danh sách sản phẩm trong giỏ hàng
+			function loadCartProducts() {
+
+				// Gọi AJAX để lấy lại danh sách sản phẩm từ máy chủ
+				$.ajax({
+					method: 'GET',
+					url: '/cart/get-all-items',
+					success: function (response) {
+					// Xử lý phản hồi từ máy chủ
+					// Ví dụ: Thêm các mục vào danh sách
+						console.log(response);
+
+						if (response.success) {
+							// Chọn phần tử chứa danh sách
+							var $cartProducts = $('.cart_products ul');
+
+							var $subCartPrice = $('#sub-cart-price');
+							var $cartPrice = $('#cart-price');
+							var subPrice = 0;
+							window.location.href = '/shopping-cart';
+							
+
+						}
+					},
+					error: function (xhr, status, error) {
+						// Xử lý lỗi nếu có
+						console.log(error);
+					}
+				});
+			}
+
+			$("#apply_coupon_button").click(function (event) {
+				event.preventDefault();
+
+				var couponCode = $("#coupon_code_input").val();
+
+				$.ajax({
+					url: "/vouchers/check-coupon", // Đặt đường dẫn tới phương thức kiểm tra mã voucher của bạn
+					type: "POST", // Phương thức HTTP (GET, POST, PUT, DELETE, vv.)
+					dataType: "json", // Loại dữ liệu trả về từ máy chủ (JSON, XML, vv.)
+					data: { couponCode: couponCode }, // Dữ liệu gửi đến máy chủ
+					success: function (response) {
+						console.log(response);
+						// Xử lý phản hồi từ máy chủ
+						if (response.success) {
+
+							// Cập nhật giảm giá và tổng tiền trên giao diện
+							$("#discount_amount").text("-"+ response.discountValue.toLocaleString("en-VN") + "đ");
+							$("#total_price").text((response.subTotalPrice - response.discountValue).toLocaleString("en-VN") + "đ");
+
+							// Hiển thị hàng giảm giá
+							$("#discount_row").show();
+						} else {
+							// Hiển thị thông báo lỗi nếu mã voucher không hợp lệ
+							alert(response.message);
+						}
+					},
+					error: function (xhr, status, error) {
+						// Xử lý lỗi nếu có
+						console.error(error);
+					}
+				});
+			});
+		});
+		
+
+		
+	</script>
+}
+
+@* // Duyệt qua mỗi mục trong danh sách phản hồi
+	response.items.forEach(function (item) {
+		subPrice += item.totalPrice;
+		// Tạo một phần tử
+		<li>
+			mới cho mỗi mục
+			var $newItem = $('
+		<li class="cart_product d-flex flex-md-row flex-column align-items-md-center align-items-start justify-content-start" data-item-id="' + item.id + '">
+			');
+			// Thêm nội dung của mỗi mục vào phần tử
+		<li>
+			mới
+			$newItem.append('<div class="cart_product_image"><img style="height: 8vh;width: 6vw;" src="/images/products/' + item.thumb + '" alt=""></div>');
+			$newItem.append('<input id="variantid_input" hidden disabled type="text" pattern="[0-9]*" value="' + item.id + '">');
+			$newItem.append('<div class="cart_product_name"><a href="product.html">' + item.name + '</a></div>');
+			$newItem.append('<div class="cart_product_info ml-auto"><div class="cart_product_info_inner d-flex flex-row align-items-center justify-content-md-end justify-content-start"><div class="cart_product_price">' + item.productSize + ' cm</div><div class="cart_product_price">' + item.price + ' đ</div><div class="product_quantity_container"><div class="product_quantity clearfix"><input id="quantity_input" type="text" pattern="[0-9]*" value="' + item.quantity + '"><div class="quantity_buttons"><div id="quantity_inc_button" class="quantity_inc quantity_control"><i class="fa fa-caret-up" aria-hidden="true"></i></div><div id="quantity_dec_button" class="quantity_dec quantity_control"><i class="fa fa-caret-down" aria-hidden="true"></i></div></div></div></div><div class="cart_product_total">' + item.totalPrice + ' đ</div><div class="cart_product_button"><button class="cart_product_remove"><img src="~/assets/images/trash.png" alt=""></button></div></div></div>');
+			// Thêm phần tử
+		<li>
+			mới vào danh sách
+
+		$cartProducts.append($newItem);
+
+	});
+	$cartPrice.text(subPrice + "đ");
+	$subCartPrice.text(subPrice + "đ");
+ *@

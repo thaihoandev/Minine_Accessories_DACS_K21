@@ -1,0 +1,28 @@
+﻿    <!-- Google Fonts -->
+
+
+@section Styles{
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="~/assets/styles/user_chat.css" >
+    <style>
+    </style>
+}
+
+@section Scripts{
+    <script>
+        jQuery(document).ready(function () {
+
+            $(".chat-list a").click(function () {
+                $(".chatbox").addClass('showbox');
+                return false;
+            });
+
+            $(".chat-icon").click(function () {
+                $(".chatbox").removeClass('showbox');
+            });
+
+
+        });
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+}

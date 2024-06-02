@@ -1,0 +1,73 @@
+@charset "utf-8";
+/* CSS Document */
+
+/******************************
+
+[Table of Contents]
+
+1. Fonts
+2. Body and some general stuff
+3. Header
+	3.1 Header - Logo
+	3.2 Header - Main Navigation
+	3.3 Header - Search
+	3.4 Header - Shopping
+	3.5 Header - Burger
+4. Home
+5. Menu
+6. Product
+	6.1 Current Page
+	6.2 Product Image
+	6.3 Product Content
+7. Reviews
+8. Review Form
+9. Newsletter
+10. Footer
+
+
+******************************/
+
+/***********
+1. Fonts
+***********/
+.new-collection-cates {
+	margin: 60px 20px;
+}
+
+.new-collection-cates-list {
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-wrap: wrap; /* Ensure it wraps if there are more items than can fit in one line */
+}
+
+	.new-collection-cates-list li {
+		margin: 0 10px; /* Adjust spacing between items as needed */
+		padding: 0 16px;
+	}
+
+.new-collection-cate-item {
+	text-align: center;
+	display: block;
+	height: 98px;
+	width: 98px;
+}
+
+.new-collection-cate-item-head {
+}
+
+	.new-collection-cate-item-head img {
+		border-radius: 50%;
+		height: 100%;
+		width: 100%;
+		object-fit: cover;
+	}
+
+.new-collection-cate-item-title {
+	color: #27251f;
+	display: block;
+	margin-top: 10px;
+	font-size: 12px;
+	font-weight: 500;
+}

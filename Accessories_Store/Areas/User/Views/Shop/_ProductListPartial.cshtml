@@ -1,0 +1,52 @@
+﻿@using Accessories_Store.Models.Entities;
+@model IEnumerable<Product>
+@inject Accessories_Store.Areas.Admin.Services.IRatingRepo IRatingRepo;
+@inject Accessories_Store.Areas.Admin.Services.IProductRepo IProductRepo;
+
+@inject Accessories_Store.Areas.Admin.Services.ICategoryRepo ICategoryRepo;
+@inject Accessories_Store.Areas.Admin.Services.IProductMaterialRepo IProductMaterialRepo;
+
+@foreach (var item in Model)
+{
+    var variantId = item.ProductVariants.First().Id;
+    var ratingSum = 0;
+    var ratingCount = 0;
+    var ratingAvg = 0;
+    var ratings = IRatingRepo.findAllById(item.Id);
+    foreach (var rating in ratings)
+    {
+        ratingCount++;
+        ratingSum += rating.NumberStar;
+        ratingAvg = ratingSum / ratingCount;
+    }
+    <div class="product col-lg-4">
+        <div class="product_image"><img src="~/images/products/@item.Thumb" alt=""></div>
+        <div class="rating rating_@ratingAvg" data-rating="@ratingAvg">
+            <i class="fa fa-star"></i>
+            <i class="fa fa-star"></i>
+            <i class="fa fa-star"></i>
+            <i class="fa fa-star"></i>
+            <i class="fa fa-star"></i>
+        </div>
+        <div class="product_content clearfix">
+            <div class="product_info">
+                <div class="product_name"><a href="/products/@item.Alias-@item.Id">@item.Name</a></div>
+                <div class="product_price">
+                    @if (item.ProductVariants != null)
+                    {
+                        @item.ProductVariants.First().Price.Value.ToString("N0")
+                    }
+                    đ
+                </div>
+            </div>
+            <div class="product_options">
+                <div id="addToCartBtn" class="product_buy product_option">
+                    <a href="/products/@item.Alias-@item.Id">
+                        <img src="~/assets/images/shopping-bag-white.svg" alt="Add to Cart">
+                    </a>
+                </div>
+                <div class="product_fav product_option">+</div>
+            </div>
+        </div>
+    </div>
+}

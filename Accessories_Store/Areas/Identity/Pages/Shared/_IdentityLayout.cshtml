@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Wish</title>
+	<meta charsetsrcutf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="description" content="Wish shop project">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="~/assets/styles/bootstrap4/bootstrap.min.css">
+	<link href="~/assets/plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" type="text/css" href="~/assets/plugins/OwlCarousel2-2.2.1/owl.carousel.css">
+	<link rel="stylesheet" type="text/css" href="~/assets/plugins/OwlCarousel2-2.2.1/owl.theme.default.css">
+	<link rel="stylesheet" type="text/css" href="~/assets/plugins/OwlCarousel2-2.2.1/animate.css">
+	<link href="~/assets/plugins/colorbox/colorbox.css" rel="stylesheet" type="text/css">
+	<link href="~/assets/plugins/malihu-custom-scrollbar/jquery.mCustomScrollbar.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" type="text/css" href="~/assets/plugins/jquery-ui-1.12.1.custom/jquery-ui.css">
+
+	<link rel="stylesheet" type="text/css" href="~/assets/styles/main_styles.css">
+	<link rel="stylesheet" type="text/css" href="~/assets/styles/responsive.css">
+	
+</head>
+<body>
+	<div class="super_container">
+
+		
+
+		<main class="container" style="margin-top:13vh;">
+			
+			@RenderBody()
+				
+		</main>
+
+		<!-- Footer -->
+
+	</div>
+
+	<script src="~/assets/js/jquery-3.2.1.min.js"></script>
+	<script src="~/assets/styles/bootstrap4/popper.js"></script>
+	<script src="~/assets/styles/bootstrap4/bootstrap.min.js"></script>
+	<script src="~/assets/plugins/OwlCarousel2-2.2.1/owl.carousel.js"></script>
+	<script src="~/assets/plugins/easing/easing.js"></script>
+	<script src="~/assets/plugins/parallax-js-master/parallax.min.js"></script>
+
+	<script src="~/assets/plugins/colorbox/jquery.colorbox-min.js"></script>
+
+	<script src="~/assets/js/custom.js"></script>
+
+	<script src="~/assets/plugins/malihu-custom-scrollbar/jquery.mCustomScrollbar.js"></script>
+	<script src="~/assets/plugins/Isotope/isotope.pkgd.min.js"></script>
+
+	<script src="~/assets/plugins/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
+
+
+
+	@await Component.InvokeAsync("Notyf")
+	@await RenderSectionAsync("Scripts", required:false)
+	@await RenderSectionAsync("Styles", required:false)
+
+</body>
+</html>

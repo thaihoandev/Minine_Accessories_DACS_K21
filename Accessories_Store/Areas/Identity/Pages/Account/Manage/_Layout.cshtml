@@ -1,0 +1,38 @@
+﻿@{
+    if (ViewData.TryGetValue("ParentLayout", out var parentLayout) && parentLayout !=  null)
+    {
+        Layout = parentLayout.ToString();
+    }
+    else
+    {
+        Layout = "/Areas/User/Views/Shared/_Layout.cshtml";
+    }
+}
+
+<div style="margin-top:14vh; padding: 0 0 40vh 0" class="profile-main">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb breadcrumb-style1">
+            <li class="breadcrumb-item">
+                <a asp-area="" asp-controller="home" asp-action="Index">Home</a>
+            </li>
+            <li class="breadcrumb-item active">Thông tin cá nhân </li>
+        </ol>
+    </nav>
+
+
+    <div class="container ">
+        <h2>Trang cá nhân</h2>
+        <hr />
+        <div class="row">
+            <div class="col-md-4">
+                <partial name="/Areas/Identity/Pages/Account/Manage/_ManageNav.cshtml" />
+            </div>
+            <div class="col-md-8">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @RenderSection("Scripts", required: false)
+}
