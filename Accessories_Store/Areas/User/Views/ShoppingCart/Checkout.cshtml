@@ -7,7 +7,9 @@
 
 }
 @using Accessories_Store.Models.Entities;
-
+@inject UserManager<ApplicationUser> _userManager;
+@using Microsoft.AspNetCore.Identity;
+@model Accessories_Store.Models.Entities.ApplicationUser
 <!-- Home -->
 <!-- Home -->
 @{
@@ -62,14 +64,14 @@
 						<div class="checkout_form_container">
 							<div id="checkout_form">
 								<div class="d-flex flex-lg-row flex-column align-items-start justify-content-between">
-									<input type="text" class="checkout_input" name="name" placeholder="Họ và Tên" required>
+									<input type="text" asp-for="Name" class="checkout_input" name="name" placeholder="Họ và Tên" required>
 								</div>
 							
-								<input type="email" class="checkout_input" name="email" placeholder="E-mail" required >
+								<input type="email" class="checkout_input" asp-for="Email" name="email" placeholder="E-mail" required >
 							
-								<input type="text" class="checkout_input" name="address" placeholder="Địa chỉ" required>
+								<input type="text" class="checkout_input" asp-for="Address" name="address" placeholder="Địa chỉ" required>
 								<div class="d-flex flex-lg-row flex-column align-items-start justify-content-between">
-									<input type="text" class="checkout_input " name="phone" placeholder="Số điện thoại" required>
+									<input type="text" class="checkout_input " asp-for="PhoneNumber" name="phone" placeholder="Số điện thoại" required>
 								</div>
 								<textarea name="notes" id="checkout_comment"  class="checkout_comment" placeholder="Để lại ghi chú"></textarea>
 								<div class="billing_options">

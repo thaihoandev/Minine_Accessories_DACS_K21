@@ -156,6 +156,7 @@ namespace Accessories_Store.Areas.User.Controllers
 		[Route("/cart/check-out")]
 		public IActionResult Checkout()
 		{
+			var user = _context.ApplicationUsers.FirstOrDefault(x=> x.Id == _userManager.GetUserId(User));
 			var cart = HttpContext.Session.GetObjectFromJson<ShoppingCart>("Cart");
 			if (cart != null)
 			{
@@ -181,8 +182,7 @@ namespace Accessories_Store.Areas.User.Controllers
 				ViewBag.DiscountValue = discountValue;
 			}
 			
-
-			return View();
+			return View(user);
 		}
 
 		[HttpPost]

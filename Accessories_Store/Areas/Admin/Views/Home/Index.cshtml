@@ -8,11 +8,66 @@
             <li class="breadcrumb-item">
                 <a asp-area="admin" asp-controller="home" asp-action="index">Trang chủ</a>
             </li>
-
+            <li class="breadcrumb-item active">Doanh số tháng </li>
         </ol>
     </nav>
     <div class="container-xxl flex-grow-1 container-p-y">
+        <div class="row mb-4">
+            <div class="col-2">
+                <div class="card-body">
+                    <div class="text-center">
+                        @section Styles{
+                            <style>
+                                #yearSelected option{
+                                    font-size: 1em;
+                                    min-height:14px;
+                                    padding:4px 0;
+                                }
+                            </style>
+                        }
+                        <select id="yearSelected" class="form-select color-dropdown" >
+                            <option selected value="2024">2024</option>
+                            <option value="2023">2023</option>
+
+                        </select>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="card-body">
+                    <div class="text-center">
+                        
+                        @{
+                            int month = 0;
+                            month = month == 0 ? DateTime.Now.Month : month;
+                            int yearCurr = 0;
+                            yearCurr = yearCurr == 0 ? DateTime.Now.Year : yearCurr;
+                        }
+                        <select id="monthSelected" class="form-select color-dropdown" >
+                            <option disabled selected value="@month">tháng @month</option>
+                            <option value="1">tháng 1</option>
+                            <option value="2">tháng 2</option>
+                            <option value="3">tháng 3</option>
+                            <option value="4">tháng 4</option>
+                            <option value="5">tháng 5</option>
+                            <option value="6">tháng 6</option>
+                            <option value="7">tháng 7</option>
+                            <option value="8">tháng 8</option>
+                            <option value="9">tháng 9</option>
+                            <option value="10">tháng 10</option>
+                            <option value="11">tháng 11</option>
+                            <option value="12">tháng 12</option>
+
+
+                        </select>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row">
+            
             <div class="col-6 col-lg-6">
                 <div class="row">
                     <div class="col-lg-12 col-md-12 order-1">
@@ -42,8 +97,15 @@
                                             </div> *@
                                         </div>
                                         <span class="fw-medium d-block mb-1">Doanh thu</span>
-                                        <h3 class="card-title mb-2">@String.Format("{0:N0}",ViewBag.Revenue)đ</h3>
-                                        <small class="text-success fw-medium"><i class="bx bx-up-arrow-alt"></i> +72.80%</small>
+                                        <h3 class="card-title mb-2">@String.Format("{0:N0}",ViewBag.monthRevenue)đ</h3>
+                                        @if (ViewBag.monthRevenue > ViewBag.monthPrevRevenue)
+                                        {
+                                            <small class="text-success fw-medium"><i class="bx bx-up-arrow-alt"></i> @(Math.Round((ViewBag.monthRevenue / ViewBag.monthPrevRevenue) * 100, 2))%</small>
+                                        }
+                                        else
+                                        {
+                                            <small class="text-danger fw-medium"><i class="bx bx-down-arrow-alt"></i> -@(Math.Round((1 - (ViewBag.monthRevenue / ViewBag.monthPrevRevenue)) * 100, 2))%</small>
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -72,8 +134,13 @@
                                             </div> *@
                                         </div>
                                         <span>Giảm giá</span>
-                                        <h3 class="card-title text-nowrap mb-1">@String.Format("{0:N0}",ViewBag.Discount)đ</h3>
-                                        <small class="text-success fw-medium"><i class="bx bx-up-arrow-alt"></i> +28.42%</small>
+                                        <h3 class="card-title text-nowrap mb-1">@String.Format("{0:N0}",ViewBag.monthDiscount)đ</h3>
+                                        @if (ViewBag.monthDiscount > ViewBag.monthPrevDiscount)
+                                        {
+                                            <small class="text-success fw-medium"><i class="bx bx-up-arrow-alt"></i> @(Math.Round((ViewBag.monthDiscount / ViewBag.monthPrevDiscount) * 100, 2))%</small>
+                                        }else{
+                                            <small class="text-danger fw-medium"><i class="bx bx-down-arrow-alt"></i> -@(Math.Round((1 - (ViewBag.monthDiscount / ViewBag.monthPrevDiscount)) * 100, 2))%</small>
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -104,8 +171,15 @@
                                             </div>*@
                                         </div>
                                         <span class="d-block mb-1">Thanh toán COD</span>
-                                        <h3 class="card-title text-nowrap mb-2">@String.Format("{0:N0}",ViewBag.CODPayment)đ</h3>
-                                        <small class="text-danger fw-medium"><i class="bx bx-down-arrow-alt"></i> -14.82%</small>
+                                        <h3 class="card-title text-nowrap mb-2">@String.Format("{0:N0}",ViewBag.monthCODPayment)đ</h3>
+                                        @if (ViewBag.monthCODPayment > ViewBag.monthPrevCODPayment)
+                                        {
+                                            <small class="text-success fw-medium"><i class="bx bx-up-arrow-alt"></i> @(Math.Round((ViewBag.monthCODPayment / ViewBag.monthPrevCODPayment) * 100, 2))%</small>
+                                        }
+                                        else
+                                        {
+                                            <small class="text-danger fw-medium"><i class="bx bx-down-arrow-alt"></i> -@(Math.Round((1 - (ViewBag.monthCODPayment / ViewBag.monthPrevCODPayment)) * 100, 2))%</small>
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -132,8 +206,15 @@
                                             </div> *@
                                         </div>
                                         <span class="fw-medium d-block mb-1">Thanh toán Ví</span>
-                                        <h3 class="card-title mb-2">@String.Format("{0:N0}",ViewBag.WalletPayment)đ</h3>
-                                        <small class="text-success fw-medium"><i class="bx bx-up-arrow-alt"></i> +28.14%</small>
+                                        <h3 class="card-title mb-2">@String.Format("{0:N0}",ViewBag.monthWalletPayment)đ</h3>
+                                        @if (ViewBag.monthWalletPayment > ViewBag.monthPrevWalletPayment)
+                                        {
+                                            <small class="text-success fw-medium"><i class="bx bx-up-arrow-alt"></i> @(Math.Round((ViewBag.monthWalletPayment / ViewBag.monthPrevWalletPayment) * 100, 2))%</small>
+                                        }
+                                        else
+                                        {
+                                            <small class="text-danger fw-medium"><i class="bx bx-down-arrow-alt"></i> -@(Math.Round((1 - (ViewBag.monthWalletPayment / ViewBag.monthPrevWalletPayment)) * 100, 2))%</small>
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -146,11 +227,18 @@
                                             <div class="d-flex flex-sm-column flex-row align-items-start justify-content-between">
                                                 <div class="card-title">
                                                     <h5 class="text-nowrap mb-2">Hồ sơ tài chính</h5>
-                                                    <span class="badge bg-label-warning rounded-pill">Năm 2024</span>
+                                                    <span class="badge bg-label-warning rounded-pill yearRevenue">Năm @yearCurr</span>
                                                 </div>
                                                 <div class="mt-sm-auto">
-                                                    <small class="text-success text-nowrap fw-medium"><i class="bx bx-chevron-up"></i> 68.2%</small>
-                                                    <h3 class="mb-0">@String.Format("{0:N0}",ViewBag.Revenue)đ</h3>
+                                                    @if (ViewBag.monthWalletPayment > ViewBag.yearPrevRevenue)
+                                                    {
+                                                        <small class="text-success fw-medium"><i class="bx bx-up-arrow-alt"></i> @(Math.Round((ViewBag.yearRevenue / ViewBag.yearPrevRevenue) * 100, 2))%</small>
+                                                    }
+                                                    else
+                                                    {
+                                                        <small class="text-danger fw-medium"><i class="bx bx-down-arrow-alt"></i> -@(Math.Round((1 - (ViewBag.yearRevenue / ViewBag.yearPrevRevenue)) * 100, 2))%</small>
+                                                    }
+                                                    <h3 class="mb-0">@String.Format("{0:N0}",ViewBag.yearRevenue)đ</h3>
                                                 </div>
                                             </div>
                                             <div id="profileReportChart"></div>
@@ -175,8 +263,8 @@
                             }
                             <div class="card-header d-flex align-items-center justify-content-between pb-0">
                                 <div class="card-title mb-0">
-                                    <h5 class="m-0 me-2">Thống kê đơn hàng</h5>
-                                    <small class="text-muted">@totalOrder.Where(x=>x.TotalDiscount >0).Count() đơn sử dụng ưu đãi</small>
+                                    <h5 class="m-0 me-2">Thống kê đơn hàng theo tháng</h5>
+                                    <small class="text-muted">@ViewBag.orderListMonthCoupon đơn sử dụng ưu đãi</small>
                                 </div>
                                 @* <div class="dropdown">
                                     <button class="btn p-0"
@@ -199,7 +287,7 @@
                                     <div class="d-flex flex-column align-items-center gap-1">
                                         <h2 class="mb-2">
                                            
-                                            @totalOrder.Count()
+                                            @ViewBag.orderListMonth.Count / @ViewBag.orderList.Count
                                         </h2>
                                         <span>Tổng đơn hàng</span>
                                     </div>
@@ -211,6 +299,8 @@
                                         @if (cat.ParentId < 0 && cat.TypeId == CategoryTypeStatus.CategoryStatus)
                                         {
                                             double? totalAmount = 0;
+                                            double? totalAmountDiscount = 0;
+
                                             <li class="d-flex mb-4 pb-1">
                                                 
                                                 <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
@@ -220,7 +310,7 @@
                                                     </div>
                                                     <div class="user-progress">
                                                         <small class="fw-medium">
-                                                            @foreach (var item in totalOrder)
+                                                            @foreach (var item in @ViewBag.orderListMonth)
                                                             {
                                                                 
                                                                 @foreach (var orderDetail in item.OrderDetails)
@@ -231,8 +321,9 @@
                                                                     }
 
                                                                 }
+                                                                
                                                             }
-                                                            @String.Format("{0:N0}",@totalAmount)đ
+                                                            @String.Format("{0:N0}",totalAmount)đ
                                                         </small>
                                                     </div>
                                                 </div>
@@ -255,3 +346,30 @@
 
     <div class="content-backdrop fade"></div>
 </div>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            // Event listener for change in year selection
+            var urlParams = new URLSearchParams(window.location.search);
+            var yearParam = urlParams.get('year');
+            var monthParam = urlParams.get('month');
+            if (yearParam) {
+                $('#yearSelected').val(yearParam);
+                $('.yearRevenue').text('Năm '+yearParam);
+            }
+            if (monthParam) {
+                $('#monthSelected').val(monthParam);
+            }
+            $('#yearSelected').change(function () {
+                var selectedYear = $(this).val(); // Get the selected year
+                window.location.href = '/admin?year=' + selectedYear;
+            });
+
+            $('#monthSelected').change(function () {
+                var selectedYear = $('#yearSelected').val(); // Get the selected year
+                var selectedMonth = $(this).val(); // Get the selected month
+                window.location.href = '/admin?year=' + selectedYear + "&&month=" + selectedMonth;
+            });
+        });
+    </script>
+}
