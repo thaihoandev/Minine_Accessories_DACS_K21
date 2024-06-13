@@ -18,7 +18,7 @@ namespace Accessories_Store.Areas.Admin.Services
         public async Task<IEnumerable<Order>> GetAllAsync()
         {
             // return await _context.Products.ToListAsync();
-            return await _context.Orders.Include(x=>x.OrderDetails).ThenInclude(x=>x.Product).ThenInclude(x=>x.Category).OrderByDescending(x => x.Status).ToListAsync();
+            return await _context.Orders.Include(x=>x.OrderDetails).ThenInclude(x=>x.Product).ThenInclude(x=>x.Category).OrderByDescending(x => x.Status).OrderByDescending(x=>x.CreatedAt).ToListAsync();
 
         }
         public async Task<IEnumerable<Order>> GetAllByStatusAsync(int id)

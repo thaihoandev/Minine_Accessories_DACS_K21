@@ -79,6 +79,7 @@ namespace Accessories_Store.Areas.User.Controllers
 				{
 					existingCartItem.Quantity = 1; // Set minimum quantity to 1
 				}
+				cart.UpdateItem(existingCartItem);
 			}
 			HttpContext.Session.SetObjectAsJson("Cart", cart);
 			_notifyService.Success("Thêm sản phẩm vào giỏ hàng thành công!");

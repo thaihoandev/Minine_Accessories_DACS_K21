@@ -49,9 +49,9 @@ namespace Accessories_Store.Areas.Admin.Controllers
             var pageNumber = page == null || page <= 0 ? 1 : page.Value;
             var pageSize = Utilities.PAGE_SIZE;
 
-            var adminRole = await _roleManager.FindByNameAsync(SD.Role_Customer);
+            var adminRole = await _roleManager.FindByNameAsync(SD.Role_Admin);
             var usersInAdminRole = await _userManager.GetUsersInRoleAsync(adminRole.Name);
-            var users = usersInAdminRole.AsQueryable();
+            var users = _context.ApplicationUsers.Where(user => !usersInAdminRole.Contains(user)).AsQueryable();
 
             PagedList<ApplicationUser> models = new PagedList<ApplicationUser>(users, pageNumber, pageSize);
             ViewBag.CurrentPage = pageNumber;

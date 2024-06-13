@@ -136,7 +136,7 @@
         <div class="col-12 col-lg-4">
             <div class="card mb-4">
                 <div class="card-header">
-                    <h6 class="card-title m-0">Thông tin người mua</h6>
+                    <h6 class="card-title m-0">Thông tin người đặt</h6>
                 </div>
                 <div class="card-body">
                     <div class="d-flex justify-content-start align-items-center mb-4">
@@ -155,11 +155,12 @@
                         <h6 class="text-body text-nowrap mb-0">12 Orders</h6>
                     </div> *@
                     <div class="d-flex justify-content-between">
-                        <h6>Thông tin liên hệ</h6>
+                        <h6>Thông tin người mua</h6>
                         <h6><a href=" javascript:void(0)" data-bs-toggle="modal" data-bs-target="#editUser">Sửa</a></h6>
                     </div>
-                    <p class=" mb-1">Email: @Model.ApplicationUser?.Email</p>
-                    <p class=" mb-0">Điện thoại: +84 916 491 863</p>
+                    <p class=" mb-1">Tên người mua: <b>@Model.Name</b></p>
+                    <p class=" mb-1">Email:</p>
+                    <p class=" mb-0">Điện thoại: <b>@Model.Phone</b></p>
                 </div>
             </div>
 
@@ -170,7 +171,7 @@
                     @* <h6 class="m-0"><a href=" javascript:void(0)" data-bs-toggle="modal" data-bs-target="#addNewAddress">Edit</a></h6> *@
                 </div>
                 <div class="card-body">
-                    <p class="mb-0">@Model.Address</p>
+                    <p class="mb-0"><b>@Model.Address</b></p>
                 </div>
 
             </div>
