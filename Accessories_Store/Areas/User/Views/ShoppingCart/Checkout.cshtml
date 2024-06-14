@@ -15,7 +15,8 @@
 @{
 	List<CartItemVM> productOrder = ViewBag.CartOrder;
 	double? subTotalPrice = 0;
-	double? discountValue = ViewBag.DiscountValue;
+	double? discountValue = 0; 
+	discountValue  = ViewBag.DiscountValue;
 	@if (productOrder!=null && productOrder.Count > 0)
 	{
 		foreach (var item in productOrder)
@@ -128,11 +129,20 @@
 								</li>
 								<li class="d-flex flex-row align-items-center justify-content-start">
 									<div class="cart_total_title">Giảm giá</div>
-									<div class="cart_total_price ml-auto">@String.Format("{0:N0}",-discountValue)đ</div>
+									<div class="cart_total_price ml-auto">-@String.Format("{0:N0}",discountValue)đ</div>
 								</li>
 								<li class="d-flex flex-row align-items-start justify-content-start total_row">
 									<div class="cart_total_title">Tổng</div>
-									<div class="cart_total_price ml-auto"> @String.Format("{0:N0}",subTotalPrice-discountValue)đ</div>
+									@if (discountValue != 0)
+									{
+										
+										<div class="cart_total_price ml-auto"> @String.Format("{0:N0}",subTotalPrice - discountValue)đ</div>
+									}
+									else
+									{
+										<div class="cart_total_price ml-auto"> @String.Format("{0:N0}",subTotalPrice)đ</div>
+
+									}
 								</li>
 							</ul>
 						</div>

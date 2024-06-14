@@ -3,7 +3,7 @@
     public class ShoppingCart
     {
         public List<CartItemVM> Items { get; set; } = new List<CartItemVM>();
-        public double? DiscountValue { get; set; }
+        public double? DiscountValue { get; set; } = 0;
         public string? CouponCode { get; set; }
         public void AddItem(CartItemVM item)
         {
